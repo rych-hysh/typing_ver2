@@ -10,6 +10,8 @@ var prev_kana;
 var target_kana;
 var next_kana;
 
+var prev_char;
+
 var state = "q_init";
 
 var kana_index = 0;
@@ -84,6 +86,7 @@ function typed(input) {
     if (latest != null) latest.classList.remove("latest")
     if (res[0] == "hit") {
         document.querySelectorAll(".wrong_char").forEach(w => w.remove());
+        prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
         if (kana_index == target_string.length - 1 && state == "q_exit") {
             inputDisplay.innerHTML = "";
