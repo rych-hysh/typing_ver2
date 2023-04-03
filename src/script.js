@@ -398,6 +398,7 @@ function setAutomaton(target_kana){
             break;
         case "ご":
             automaton = automaton_GO;
+            break;
         case "だ":
             automaton = automaton_DA;
             break;
