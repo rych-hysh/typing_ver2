@@ -1,3 +1,43 @@
+function automaton_WA(input) {
+	switch (state) {
+		case "q_init":
+			if (input == "w") {
+				state = "q_1"
+				return ["hit", 0];
+			}
+			return ["miss", 0];
+		case "q_1":
+			if (input == "a") {
+				state = "q_exit";
+				return ["hit", 1];
+			}
+			return ["miss", 0]
+		default:
+			console.log("unexpected error");
+			return ["miss", 0];
+	}
+}
+
+function automaton_WO(input) {
+	switch (state) {
+		case "q_init":
+			if (input == "w") {
+				state = "q_1"
+				return ["hit", 0];
+			}
+			return ["miss", 0];
+		case "q_1":
+			if (input == "o") {
+				state = "q_exit";
+				return ["hit", 1];
+			}
+			return ["miss", 0]
+		default:
+			console.log("unexpected error");
+			return ["miss", 0];
+	}
+}
+
 function automaton_NN(input) {
 	switch (state) {
 		case "q_init":
