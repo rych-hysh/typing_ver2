@@ -437,6 +437,7 @@ function setAutomaton(target_kana){
             break;
         case "ー":
             automaton = automaton_LONG;
+            break;
         default:
             break;
     }
