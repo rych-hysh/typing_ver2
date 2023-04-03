@@ -88,8 +88,7 @@ function typed(input) {
         document.querySelectorAll(".wrong_char").forEach(w => w.remove());
         prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-        if (kana_index == target_string.length - 1 && state == "q_exit") {
-            inputDisplay.innerHTML = "";
+            if (kana_index >= target_string.length - 1 && state == "q_exit") {
             wordEnd();
         } else if (state == "q_exit") {
             kanaEnd(res[1]);
@@ -141,10 +140,13 @@ function charUpdate(){
 }
 
 function kanaEnd(skipKanaCount){
-    playSound(type_sound_buffer);
     kana_index += skipKanaCount;
+    if(kana_index >= target_string.length){
+        wordEnd();
+        return;
+    }
+    playSound(type_sound_buffer);
     state = "q_init";
-    
     displayDebugInfo();
 }
 
@@ -153,6 +155,7 @@ function wordEnd(){
     kana_index = 0;
     state = "q_init"
     word_index++;
+    document.querySelector("#input").innerHTML = "";
     displayDebugInfo();
 }
 
