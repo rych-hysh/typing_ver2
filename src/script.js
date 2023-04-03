@@ -85,7 +85,7 @@ function typed(input) {
     let res = automaton(input);
     let latest = inputDisplay.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
-    if(res[0] == "skip") return;
+    if (res[0] == "skip") return;
     if (res[0] == "hit") {
         prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
