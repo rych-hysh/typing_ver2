@@ -306,6 +306,18 @@ function setAutomaton(target_kana) {
             automaton = automaton_NA;
             break;
         case "に":
+            if(next_kana == "ゃ"){
+                automaton = automaton_NYA;
+                break;
+            }
+            if(next_kana == "ゅ"){
+                automaton = automaton_NYU;
+                break;
+            }
+            if(next_kana == "ょ"){
+                automaton = automaton_NYO;
+                break;
+            }
             automaton = automaton_NI;
             break;
         case "ぬ":
