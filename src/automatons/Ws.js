@@ -13,12 +13,26 @@ function automaton_NN(input) {
 			return ["miss", 0];
 
 		case "q_1b":
+			if(input == "n"){
+				state = "q_exit";
+				return ["hit", 1]
+			}
 			// 次の文字の入力に入るため特別処理
-			if (input == getConsonant(next_kana)) {
+			let next = getConsonant(next_kana);
+			if(next.length ==1 ){
+				if(next != input) return ["miss", 0];
 				kanaEnd(1)
 				typed(input);
 				return ["skip", 0];
 			}
+			getConsonant(next_kana).forEach(consonant => {
+				if (input == consonant) {
+					kanaEnd(1)
+					typed(input);
+					return ["skip", 0];
+				}
+			})
+			return ["miss", 0]
 		case "q_1a":
 			if (input == "n") {
 				state = "q_exit";
@@ -26,6 +40,7 @@ function automaton_NN(input) {
 			}
 			return ["miss", 0];
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
