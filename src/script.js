@@ -399,6 +399,37 @@ function setAutomaton(target_kana){
         case "ご":
             automaton = automaton_GO;
             break;
+        case "ざ":
+            automaton = automaton_ZA;
+            break;
+        case "じ":
+            if(next_kana == "ゃ"){
+                automaton = automaton_JA
+                break;
+            }
+            if(next_kana == "ゅ"){
+                automaton = automaton_JU
+                break;
+            }
+            if(next_kana == "ょ"){
+                automaton = automaton_JO
+                break;
+            }
+            if(next_kana == "ぇ"){
+                automaton = automaton_JE
+                break;
+            }
+            automaton = automaton_ZI;
+            break;
+        case "ず":
+            automaton = automaton_ZU;
+            break;
+        case "ぜ":
+            automaton = automaton_ZE;
+            break;
+        case "ぞ":
+            automaton = automaton_ZO;
+            break;
         case "だ":
             automaton = automaton_DA;
             break;
