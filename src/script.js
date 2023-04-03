@@ -349,8 +349,16 @@ function setAutomaton(target_kana) {
             break;
         case "ふ":
             // 小さい「ぇ」
+            if (next_kana == "ぁ") {
+                automaton = automaton_FA;
+                break;
+            }
             if (next_kana == "ぇ") {
                 automaton = automaton_FE;
+                break;
+            }
+            if (next_kana == "ぉ") {
+                automaton = automaton_FO;
                 break;
             }
             automaton = automaton_FU;
