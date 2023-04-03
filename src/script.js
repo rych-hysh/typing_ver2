@@ -333,6 +333,18 @@ function setAutomaton(target_kana) {
             automaton = automaton_HA;
             break;
         case "ひ":
+            if(next_kana == "ゃ"){
+                automaton = automaton_HYA;
+                break;
+            }
+            if(next_kana == "ゅ"){
+                automaton = automaton_HYU;
+                break;
+            }
+            if(next_kana == "ょ"){
+                automaton = automaton_HYO;
+                break;
+            }
             automaton = automaton_HI;
             break;
         case "ふ":
