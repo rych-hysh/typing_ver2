@@ -1,0 +1,72 @@
+body{
+    background-image: url("../img/bg.jpg");
+}
+
+#main_content {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    margin-top: 15%;
+    background: #1a2a6c;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #fdbb2d, #b21f1f, #1a2a6c);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fdbb2d, #b21f1f, #1a2a6c);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#problem_display_block{
+    width: 500px;
+    position: inherit;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    background-color: rgba(200, 255, 200, 0.3);
+    border-radius: 5px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+#input_display_block{
+    text-align: center;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(200, 255, 200, 0.3);
+    border-radius: 5px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    width:fit-content;
+    height: 30px;
+    font-size: large;
+    padding: 3px;
+}
+
+.correct_char {
+    color: black;
+}
+
+.wrong_char {
+    color: red;
+}
+
+.latest {
+    background-color: rgba(230, 255, 230, 0.3);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+#debugInfo{
+    background-color: rgba(180, 180, 240, 0.3);
+    border-radius: 5px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    margin-left: 60%;
+    margin-right: 5%;
+    margin-bottom: 3%;
+}
