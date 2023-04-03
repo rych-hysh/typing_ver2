@@ -13,6 +13,7 @@ function automaton_SA(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -40,7 +41,9 @@ function automaton_SI(input) {
 				state = "q_exit";
 				return ["hit", 1];
 			}
+			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -59,6 +62,7 @@ function automaton_SU(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -77,6 +81,7 @@ function automaton_SE(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -96,6 +101,7 @@ function automaton_SO(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -115,6 +121,7 @@ function automaton_ZA(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -135,6 +142,7 @@ function automaton_ZI(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -153,6 +161,7 @@ function automaton_ZU(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -171,6 +180,7 @@ function automaton_ZE(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -190,6 +200,7 @@ function automaton_ZO(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -234,7 +245,7 @@ function automaton_SHA(input) {
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
-			return;
+			return ["miss", 0];
 	}
 }
 function automaton_SHU(input) {
@@ -277,7 +288,7 @@ function automaton_SHU(input) {
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
-			return;
+			return ["miss", 0];
 	}
 }
 function automaton_SHE(input) {
@@ -310,7 +321,7 @@ function automaton_SHE(input) {
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
-			return;
+			return ["miss", 0];
 	}
 }
 function automaton_SHO(input) {
@@ -353,7 +364,7 @@ function automaton_SHO(input) {
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
-			return;
+			return ["miss", 0];
 	}
 }
 
@@ -386,7 +397,8 @@ function automaton_JA(input) {
 			}
 			return ["miss", 0]
 		default:
-			break;
+			console.log("unexpected error");
+			return ["miss", 0];
 	}
 }
 
@@ -419,7 +431,42 @@ function automaton_JU(input) {
 			}
 			return ["miss", 0]
 		default:
-			break;
+			console.log("unexpected error");
+			return ["miss", 0];
+	}
+}
+
+function automaton_JE(input){
+	switch (state) {
+		case "q_init":
+			if (input == "j" || input == "z") {
+				state = "q_1"
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_1":
+			if (input == "e" && prev_char == "j") {
+				state = "q_exit"
+				return ["hit", 2]
+			}
+			if (input == "i") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			if (input == "y") {
+				state = "q_2"
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_2":
+			if (input == "e") {
+				state = "q_exit"
+				return ["hit", 2]
+			}
+			return ["miss", 0]
+		default:
+			console.log("unexpected error");
+			return ["miss", 0];
 	}
 }
 
@@ -452,6 +499,7 @@ function automaton_JO(input) {
 			}
 			return ["miss", 0]
 		default:
-			break;
+			console.log("unexpected error");
+			return ["miss", 0];
 	}
 }

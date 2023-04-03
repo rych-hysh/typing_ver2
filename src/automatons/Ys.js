@@ -14,6 +14,7 @@ function automaton_YA(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -32,6 +33,7 @@ function automaton_YU(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -50,6 +52,7 @@ function automaton_YO(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -76,6 +79,7 @@ function automaton_LYA(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -100,6 +104,7 @@ function automaton_LYU(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
@@ -124,6 +129,7 @@ function automaton_LYO(input) {
 			}
 			return ["miss", 0]
 		default:
+			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
