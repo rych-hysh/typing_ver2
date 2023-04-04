@@ -1,0 +1,8 @@
+stateDiagram
+    loading --> loaded
+    loaded  --> playing
+    playing --> result
+    result --> loaded : back
+    result --> detail : select
+    detail --> loaded : back
+    playing --> loaded : cancelled
