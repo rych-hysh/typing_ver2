@@ -211,6 +211,7 @@ function load_finished(arg_buffer_list) {
     correct_sound_buffer = arg_buffer_list[2];
 }
 
+//TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
 function setAutomaton(target_kana) {
     var automaton;
     switch (target_kana) {
@@ -492,6 +493,21 @@ function setAutomaton(target_kana) {
             break;
         case "ぼ":
             automaton = automaton_BO;
+            break;
+        case "ぱ":
+            automaton = automaton_PA;
+            break;
+        case "ぴ":
+            automaton = automaton_PI;
+            break;
+        case "ぷ":
+            automaton = automaton_PU;
+            break;
+        case "ぺ":
+            automaton = automaton_PE;
+            break;
+        case "ぽ":
+            automaton = automaton_PO;
             break;
         case "ぁ":
             automaton = automaton_LA;
