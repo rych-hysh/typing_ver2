@@ -1,5 +1,8 @@
 window.addEventListener("load", init);
-window.addEventListener("keydown", keydown)
+window.addEventListener("keydown", keydown);
+
+var game_state = "loading";
+
 
 var target_string;
 
@@ -23,6 +26,39 @@ let correct_sound_buffer;
 
 const WordListRequest = new Request('data/wordlist.json');
 const BackendRequest = new Request('https://test.hryoichi.com/ver2/src/automaton.php')
+
+function setState(new_state){
+    state = "q_init";
+    word_index = 0;
+    resetInput();
+    const TitleScene = document.querySelector("#title_scene");
+    const PlayScene = document.querySelector("#playing_scene");
+    const ResultScene = document.querySelector("#result_scene");
+    switch (new_state) {
+        case "loaded":
+            PlayScene.classList.add("hide");
+            TitleScene.classList.remove("hide");
+            ResultScene.classList.add("hide");
+            break;
+        case "playing":
+            charUpdate();
+            displayTarget();
+            PlayScene.classList.remove("hide");
+            TitleScene.classList.add("hide");
+            ResultScene.classList.add("hide");
+            break;
+        case "result":
+            PlayScene.classList.add("hide");
+            TitleScene.classList.add("hide");
+            ResultScene.classList.remove("hide");
+            break;
+        default:
+            new_state = "loaded";
+            setState(new_state);
+    }
+    game_state = new_state;
+}
+
 function init() {
 
 
@@ -40,13 +76,6 @@ function init() {
     ], load_finished)
     buffer_loader.load();
 
-
-    const GetHeader = new Headers();
-    GetHeader.append('Content-Type', 'application/json')
-    const GetInit = {
-        method: "GET",
-        headers: GetHeader
-    }
     // const PostHeader = new Headers();
     // PostHeader.append('Content-Type', 'text/plain')
     // const PostInit = {
@@ -54,19 +83,35 @@ function init() {
     //     headers: PostHeader,
     //     body: "wan"
     // }
+    document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
+    document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
+    setState("loaded");
+    fetchWords()
+}
 
+function fetchWords(){
+    const GetHeader = new Headers();
+    GetHeader.append('Content-Type', 'application/json')
+    const GetInit = {
+        method: "GET",
+        headers: GetHeader
+    }
     fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
         Wordlist = data;
-        console.log(Wordlist);
         target_string = Wordlist[word_index]["displaykana"];
         displayTarget(word_index);
         displayDebugInfo();
     });
-
 }
 
 function keydown(e) {
-    typed(e.key);
+    if(game_state == "playing"){
+        if(e.key == "Escape"){
+            setState("loaded");
+        }
+        //大文字小文字を区別しない。英語入力時に困ったら修正する。
+        typed(e.key.toLowerCase());
+    }
 }
 
 /*
@@ -89,8 +134,7 @@ function typed(input) {
     if (res[0] == "hit") {
         prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-        if (kana_index == target_string.length - 1 && state == "q_exit") {
-            inputDisplay.innerHTML = "";
+            if (kana_index >= target_string.length - 1 && state == "q_exit") {
             wordEnd();
         } else if (state == "q_exit") {
             kanaEnd(res[1]);
@@ -100,8 +144,8 @@ function typed(input) {
     } else {
         playSound(miss_sound_buffer);
         const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
-        console.log(inputDisplay.innerHTML)
+
+        if (lastIndex != -1)  inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
@@ -110,8 +154,6 @@ function typed(input) {
     // prev_kana = target_string[kana_index - 1];
     // target_kana = target_string[kana_index];
     // next_kana = target_string[kana_index + 1];
-    displayTarget(word_index);
-    charUpdate();
     displayDebugInfo();
 }
 
@@ -144,6 +186,11 @@ function charUpdate() {
 function kanaEnd(skipKanaCount) {
     playSound(type_sound_buffer);
     kana_index += skipKanaCount;
+    if(kana_index >= target_string.length){
+        wordEnd();
+        return;
+    }
+    playSound(type_sound_buffer);
     state = "q_init";
 
     displayDebugInfo();
@@ -151,10 +198,21 @@ function kanaEnd(skipKanaCount) {
 
 function wordEnd() {
     playSound(correct_sound_buffer);
+    resetInput();
+    word_index++;
+    if(word_index == Wordlist.length){
+        setState("result");
+        return;
+    }
+    displayTarget(word_index);
+    charUpdate();
+    displayDebugInfo();
+}
+
+function resetInput(){
     kana_index = 0;
     state = "q_init"
-    word_index++;
-    displayDebugInfo();
+    document.querySelector("#input").innerHTML = "";
 }
 
 function isVowel(kana) {
@@ -166,53 +224,8 @@ function isNstart(kana) {
     return false;
 }
 
-function playSound(buffer) {
-    var source = audio_context.createBufferSource(); // creates a sound source
-    source.buffer = buffer; // tell the source which sound to play
-    source.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
-    source.start(0); // play the source now
-    // note: on older systems, may have to use deprecated noteOn(time);
-}
-
-class BufferLoader {
-    constructor(arg_context, arg_urlList, arg_callback) {
-        this.context = arg_context;
-        this.url_list = arg_urlList;
-        this.onload = arg_callback;
-        this.buffer_list = new Array();
-        this.load_count = 0;
-    }
-
-
-    loadBuffer(snd_url, snd_index) {
-        let loader = this;
-        fetch(snd_url, {
-            method: 'GET'
-        }).then(response => response.arrayBuffer()).then(arrbuffer => {
-            loader.context.decodeAudioData(arrbuffer, buffer => {
-                if (!buffer) {
-                    alert('error decoding file data: ' + snd_url);
-                    return;
-                }
-                loader.buffer_list[snd_index] = buffer;
-                this.load_count++;
-                if (this.url_list.length == this.load_count) loader.onload(loader.buffer_list);
-            })
-        })
-    }
-    load() {
-        for (var i = 0; i < this.url_list.length; ++i)
-            this.loadBuffer(this.url_list[i], i);
-    }
-}
-function load_finished(arg_buffer_list) {
-    type_sound_buffer = arg_buffer_list[0];
-    miss_sound_buffer = arg_buffer_list[1];
-    correct_sound_buffer = arg_buffer_list[2];
-}
-
 //TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
-function setAutomaton(target_kana) {
+function setAutomaton(target_kana){
     var automaton;
     switch (target_kana) {
         case "あ":

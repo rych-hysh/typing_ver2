@@ -82,3 +82,47 @@ function getConsonant(kana) {
 			break;
 	}
 }
+
+class BufferLoader {
+	constructor(arg_context, arg_urlList, arg_callback) {
+			this.context = arg_context;
+			this.url_list = arg_urlList;
+			this.onload = arg_callback;
+			this.buffer_list = new Array();
+			this.load_count = 0;
+	}
+
+
+	loadBuffer(snd_url, snd_index) {
+			let loader = this;
+			fetch(snd_url, {
+					method: 'GET'
+			}).then(response => response.arrayBuffer()).then(arrbuffer => {
+					loader.context.decodeAudioData(arrbuffer, buffer => {
+							if (!buffer) {
+									alert('error decoding file data: ' + snd_url);
+									return;
+							}
+							loader.buffer_list[snd_index] = buffer;
+							this.load_count++;
+							if (this.url_list.length == this.load_count) loader.onload(loader.buffer_list);
+					})
+			})
+	}
+	load() {
+			for (var i = 0; i < this.url_list.length; ++i)
+					this.loadBuffer(this.url_list[i], i);
+	}
+}
+function load_finished(arg_buffer_list) {
+	type_sound_buffer = arg_buffer_list[0];
+	miss_sound_buffer = arg_buffer_list[1];
+	correct_sound_buffer = arg_buffer_list[2];
+}
+function playSound(buffer) {
+	var source = audio_context.createBufferSource(); // creates a sound source
+	source.buffer = buffer; // tell the source which sound to play
+	source.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
+	source.start(0); // play the source now
+	// note: on older systems, may have to use deprecated noteOn(time);
+}
