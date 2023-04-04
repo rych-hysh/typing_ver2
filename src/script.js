@@ -1,5 +1,8 @@
 window.addEventListener("load", init);
-window.addEventListener("keydown", keydown)
+window.addEventListener("keydown", keydown);
+
+var game_state = "loading";
+
 
 var target_string;
 
@@ -23,6 +26,31 @@ let correct_sound_buffer;
 
 const WordListRequest = new Request('data/wordlist.json');
 const BackendRequest = new Request('https://test.hryoichi.com/ver2/src/automaton.php')
+
+function setState(new_state){
+    state = "q_init";
+    word_index = 0;
+    kana_index = 0;
+    const TitleScene = document.querySelector("#title_scene");
+    const PlayScene = document.querySelector("#playing_scene");
+    switch (new_state) {
+        case "loaded":
+            console.log("loaded");
+            PlayScene.classList.add("hide");
+            TitleScene.classList.remove("hide");
+            break;
+        case "playing":
+            charUpdate();
+            PlayScene.classList.remove("hide");
+            TitleScene.classList.add("hide");
+            break;
+        default:
+            new_state = "loaded";
+            setState(new_state);
+    }
+    game_state = new_state;
+}
+
 function init() {
 
 
@@ -40,13 +68,6 @@ function init() {
     ], load_finished)
     buffer_loader.load();
 
-
-    const GetHeader = new Headers();
-    GetHeader.append('Content-Type', 'application/json')
-    const GetInit = {
-        method: "GET",
-        headers: GetHeader
-    }
     // const PostHeader = new Headers();
     // PostHeader.append('Content-Type', 'text/plain')
     // const PostInit = {
@@ -54,7 +75,18 @@ function init() {
     //     headers: PostHeader,
     //     body: "wan"
     // }
+    document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
+    setState("loaded");
+    fetchWords()
+}
 
+function fetchWords(){
+    const GetHeader = new Headers();
+    GetHeader.append('Content-Type', 'application/json')
+    const GetInit = {
+        method: "GET",
+        headers: GetHeader
+    }
     fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
         Wordlist = data;
         console.log(Wordlist);
@@ -62,11 +94,13 @@ function init() {
         displayTarget(word_index);
         displayDebugInfo();
     });
-
 }
 
 function keydown(e) {
-    typed(e.key);
+    if(game_state == "playing"){
+        //大文字小文字を区別しない。英語入力時に困ったら修正する。
+        typed(e.key.toLowerCase());
+    }
 }
 
 /*
@@ -166,51 +200,6 @@ function isVowel(kana) {
 function isNstart(kana) {
     if (kana == "な" || kana == "に" || kana == "ぬ" || kana == "ね" || kana == "の") return true;
     return false;
-}
-
-function playSound(buffer) {
-    var source = audio_context.createBufferSource(); // creates a sound source
-    source.buffer = buffer; // tell the source which sound to play
-    source.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
-    source.start(0); // play the source now
-    // note: on older systems, may have to use deprecated noteOn(time);
-}
-
-class BufferLoader {
-    constructor(arg_context, arg_urlList, arg_callback) {
-        this.context = arg_context;
-        this.url_list = arg_urlList;
-        this.onload = arg_callback;
-        this.buffer_list = new Array();
-        this.load_count = 0;
-    }
-
-
-    loadBuffer(snd_url, snd_index) {
-        let loader = this;
-        fetch(snd_url, {
-            method: 'GET'
-        }).then(response => response.arrayBuffer()).then(arrbuffer => {
-            loader.context.decodeAudioData(arrbuffer, buffer => {
-                if (!buffer) {
-                    alert('error decoding file data: ' + snd_url);
-                    return;
-                }
-                loader.buffer_list[snd_index] = buffer;
-                this.load_count++;
-                if (this.url_list.length == this.load_count) loader.onload(loader.buffer_list);
-            })
-        })
-    }
-    load() {
-        for (var i = 0; i < this.url_list.length; ++i)
-            this.loadBuffer(this.url_list[i], i);
-    }
-}
-function load_finished(arg_buffer_list) {
-    type_sound_buffer = arg_buffer_list[0];
-    miss_sound_buffer = arg_buffer_list[1];
-    correct_sound_buffer = arg_buffer_list[2];
 }
 
 function setAutomaton(target_kana){
