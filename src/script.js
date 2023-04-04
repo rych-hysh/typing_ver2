@@ -33,16 +33,24 @@ function setState(new_state){
     kana_index = 0;
     const TitleScene = document.querySelector("#title_scene");
     const PlayScene = document.querySelector("#playing_scene");
+    const ResultScene = document.querySelector("#result_scene");
     switch (new_state) {
         case "loaded":
             console.log("loaded");
             PlayScene.classList.add("hide");
             TitleScene.classList.remove("hide");
+            ResultScene.classList.add("hide");
             break;
         case "playing":
             charUpdate();
             PlayScene.classList.remove("hide");
             TitleScene.classList.add("hide");
+            ResultScene.classList.add("hide");
+            break;
+        case "result":
+            PlayScene.classList.add("hide");
+            TitleScene.classList.add("hide");
+            ResultScene.classList.remove("hide");
             break;
         default:
             new_state = "loaded";
@@ -142,8 +150,6 @@ function typed(input) {
     // prev_kana = target_string[kana_index - 1];
     // target_kana = target_string[kana_index];
     // next_kana = target_string[kana_index + 1];
-    displayTarget(word_index);
-    charUpdate();
     displayDebugInfo();
 }
 
@@ -186,10 +192,16 @@ function kanaEnd(skipKanaCount){
 
 function wordEnd(){
     playSound(correct_sound_buffer);
+    if(word_index == Wordlist.length - 1){
+        setState("result");
+        return;
+    }
     kana_index = 0;
     state = "q_init"
     word_index++;
     document.querySelector("#input").innerHTML = "";
+    displayTarget(word_index);
+    charUpdate();
     displayDebugInfo();
 }
 
