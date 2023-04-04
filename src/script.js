@@ -30,19 +30,19 @@ const BackendRequest = new Request('https://test.hryoichi.com/ver2/src/automaton
 function setState(new_state){
     state = "q_init";
     word_index = 0;
-    kana_index = 0;
+    resetInput();
     const TitleScene = document.querySelector("#title_scene");
     const PlayScene = document.querySelector("#playing_scene");
     const ResultScene = document.querySelector("#result_scene");
     switch (new_state) {
         case "loaded":
-            console.log("loaded");
             PlayScene.classList.add("hide");
             TitleScene.classList.remove("hide");
             ResultScene.classList.add("hide");
             break;
         case "playing":
             charUpdate();
+            displayTarget();
             PlayScene.classList.remove("hide");
             TitleScene.classList.add("hide");
             ResultScene.classList.add("hide");
@@ -84,6 +84,7 @@ function init() {
     //     body: "wan"
     // }
     document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
+    document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
     setState("loaded");
     fetchWords()
 }
@@ -193,17 +194,21 @@ function kanaEnd(skipKanaCount){
 
 function wordEnd(){
     playSound(correct_sound_buffer);
-    if(word_index == Wordlist.length - 1){
+    resetInput();
+    word_index++;
+    if(word_index == Wordlist.length){
         setState("result");
         return;
     }
-    kana_index = 0;
-    state = "q_init"
-    word_index++;
-    document.querySelector("#input").innerHTML = "";
     displayTarget(word_index);
     charUpdate();
     displayDebugInfo();
+}
+
+function resetInput(){
+    kana_index = 0;
+    state = "q_init"
+    document.querySelector("#input").innerHTML = "";
 }
 
 function isVowel(kana) {

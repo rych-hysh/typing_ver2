@@ -27,25 +27,24 @@ button{
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-#title{
-    width: 500px;
+.display_block{
     position: inherit;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 80px;
     background-color: rgba(200, 255, 200, 0.3);
     border-radius: 5px;
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
 }
 
-#play_button{
+.scene_button{
     display: block;
     width: 20%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 30px;
     margin-bottom: 30px;
     font-size: large;
     background-color: rgba(230, 255, 230, 0.45);
@@ -53,33 +52,31 @@ button{
     padding: 2% 5%;
 }
 
-#play_button:hover{
+.scene_button:hover{
     transform: scale(1.1);
     box-shadow: 4px 4px 4px #fff;
 }
 
-#problem_display_block{
+#title_display_block{
     width: 500px;
+}
+
+#title{
     position: inherit;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 80px;
+}
+
+#problem_display_block{
+    width: 500px;
     margin-top: 100px;
-    background-color: rgba(200, 255, 200, 0.3);
-    border-radius: 5px;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
 }
 
 #input_display_block{
-    text-align: center;
     margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: rgba(200, 255, 200, 0.3);
-    border-radius: 5px;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    min-width: 10px;
     width:fit-content;
     height: 30px;
     font-size: large;
@@ -100,6 +97,10 @@ button{
     margin-bottom: 10px;
     border-radius: 3px;
     padding: 3px;
+}
+
+#result_display_block{
+    width: 500px;
 }
 
 #debugInfo{
