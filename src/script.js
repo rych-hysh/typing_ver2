@@ -526,6 +526,5 @@ function setAutomaton(target_kana) {
         default:
             break;
     }
-    console.log(automaton)
     return automaton;
 }
