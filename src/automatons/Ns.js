@@ -94,7 +94,7 @@ function automaton_NO(input) {
 	}
 }
 
-function automaton_NYA() {
+function automaton_NYA(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -124,7 +124,7 @@ function automaton_NYA() {
 	}
 }
 
-function automaton_NYU() {
+function automaton_NYU(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -154,7 +154,7 @@ function automaton_NYU() {
 	}
 }
 
-function automaton_NYO() {
+function automaton_NYO(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
