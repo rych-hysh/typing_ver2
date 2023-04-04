@@ -24,25 +24,25 @@
         <source src="/snd/type.mp3" type="audio/mp3">
     </audio>
     <div id="title_scene" class="scene">
-        <div id="title_block">
+        <div id="title_block" class="display_block">
             <h1 id="title">Typing Game v2</h1>
-            <button id="play_button">PLAY</button>
+            <button id="play_button" class="scene_button">PLAY</button>
         </div>
     </div>
-    <div id="playing_scene" class="scene">
-        <div id="problem_display_block">
+    <div id="playing_scene" class="scene hide">
+        <div id="problem_display_block" class="display_block">
             <div id="display"></div>
             <div id="displaykana"></div>
         </div>
-        <div id="input_display_block">
+        <div id="input_display_block" class="display_block">
             <div id="input"></div>
         </div>
         <div id="debugInfo"></div>
     </div>
-    <div id="result_scene" class="scene">
-        <div id="result_block">
+    <div id="result_scene" class="scene hide">
+        <div id="result_display_block" class="display_block">
             <h1 id="result">Clear</h1>
-            <button id="back_button">BACK</button>
+            <button id="back_button" class="scene_button">BACK</button>
         </div>
     </div>
 </body>

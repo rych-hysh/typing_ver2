@@ -97,7 +97,6 @@ function fetchWords(){
     }
     fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
         Wordlist = data;
-        console.log(Wordlist);
         target_string = Wordlist[word_index]["displaykana"];
         displayTarget(word_index);
         displayDebugInfo();
@@ -106,6 +105,9 @@ function fetchWords(){
 
 function keydown(e) {
     if(game_state == "playing"){
+        if(e.key == "Escape"){
+            setState("loaded");
+        }
         //大文字小文字を区別しない。英語入力時に困ったら修正する。
         typed(e.key.toLowerCase());
     }
@@ -141,7 +143,6 @@ function typed(input) {
         playSound(miss_sound_buffer);
         const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
         if (lastIndex != -1)  inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
-        console.log(inputDisplay.innerHTML)
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
