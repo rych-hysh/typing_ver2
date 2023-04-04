@@ -306,15 +306,15 @@ function setAutomaton(target_kana) {
             automaton = automaton_NA;
             break;
         case "に":
-            if(next_kana == "ゃ"){
+            if (next_kana == "ゃ") {
                 automaton = automaton_NYA;
                 break;
             }
-            if(next_kana == "ゅ"){
+            if (next_kana == "ゅ") {
                 automaton = automaton_NYU;
                 break;
             }
-            if(next_kana == "ょ"){
+            if (next_kana == "ょ") {
                 automaton = automaton_NYO;
                 break;
             }
@@ -333,15 +333,15 @@ function setAutomaton(target_kana) {
             automaton = automaton_HA;
             break;
         case "ひ":
-            if(next_kana == "ゃ"){
+            if (next_kana == "ゃ") {
                 automaton = automaton_HYA;
                 break;
             }
-            if(next_kana == "ゅ"){
+            if (next_kana == "ゅ") {
                 automaton = automaton_HYU;
                 break;
             }
-            if(next_kana == "ょ"){
+            if (next_kana == "ょ") {
                 automaton = automaton_HYO;
                 break;
             }
@@ -493,8 +493,20 @@ function setAutomaton(target_kana) {
         case "ぼ":
             automaton = automaton_BO;
             break;
+        case "ぁ":
+            automaton = automaton_LA;
+            break;
+        case "ぃ":
+            automaton = automaton_LI;
+            break;
+        case "ぅ":
+            automaton = automaton_LU;
+            break;
         case "ぇ":
-            automaton = automaton_XE;
+            automaton = automaton_LE;
+            break;
+        case "ぉ":
+            automaton = automaton_LO;
             break;
         case "っ":
             automaton = automaton_LTU;
@@ -514,5 +526,6 @@ function setAutomaton(target_kana) {
         default:
             break;
     }
+    console.log(automaton)
     return automaton;
 }
