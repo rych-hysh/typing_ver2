@@ -123,14 +123,15 @@ next_kana       仮名表記の次の課題文字
 */
 function typed(input) {
     const inputDisplay = document.querySelector("#input");
-    
+    document.querySelectorAll(".wrong_char").forEach(w => w.remove());
+
     charUpdate();
     const automaton = setAutomaton(target_kana);
     let res = automaton(input);
     let latest = inputDisplay.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
+    if (res[0] == "skip") return;
     if (res[0] == "hit") {
-        document.querySelectorAll(".wrong_char").forEach(w => w.remove());
         prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
             if (kana_index >= target_string.length - 1 && state == "q_exit") {
@@ -143,6 +144,7 @@ function typed(input) {
     } else {
         playSound(miss_sound_buffer);
         const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
+
         if (lastIndex != -1)  inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
@@ -173,7 +175,7 @@ function displayDebugInfo() {
 
 
 
-function charUpdate(){
+function charUpdate() {
     target_string = Wordlist[word_index]["displaykana"];
     prev_kana = target_string[kana_index - 1];
     target_kana = target_string[kana_index];
@@ -181,7 +183,8 @@ function charUpdate(){
     displayDebugInfo();
 }
 
-function kanaEnd(skipKanaCount){
+function kanaEnd(skipKanaCount) {
+    playSound(type_sound_buffer);
     kana_index += skipKanaCount;
     if(kana_index >= target_string.length){
         wordEnd();
@@ -189,10 +192,11 @@ function kanaEnd(skipKanaCount){
     }
     playSound(type_sound_buffer);
     state = "q_init";
+
     displayDebugInfo();
 }
 
-function wordEnd(){
+function wordEnd() {
     playSound(correct_sound_buffer);
     resetInput();
     word_index++;
@@ -220,6 +224,7 @@ function isNstart(kana) {
     return false;
 }
 
+//TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
 function setAutomaton(target_kana){
     var automaton;
     switch (target_kana) {
@@ -242,15 +247,15 @@ function setAutomaton(target_kana){
             automaton = automaton_KA;
             break;
         case "き":
-            if(next_kana == "ゃ"){
+            if (next_kana == "ゃ") {
                 automaton = automaton_KYA
                 break;
             }
-            if(next_kana == "ゅ"){
+            if (next_kana == "ゅ") {
                 automaton = automaton_KYU
                 break;
             }
-            if(next_kana == "ょ"){
+            if (next_kana == "ょ") {
                 automaton = automaton_KYO
                 break;
             }
@@ -269,19 +274,19 @@ function setAutomaton(target_kana){
             automaton = automaton_SA;
             break;
         case "し":
-            if(next_kana == "ゃ"){
+            if (next_kana == "ゃ") {
                 automaton = automaton_SHA
                 break;
             }
-            if(next_kana == "ゅ"){
+            if (next_kana == "ゅ") {
                 automaton = automaton_SHU
                 break;
             }
-            if(next_kana == "ょ"){
+            if (next_kana == "ょ") {
                 automaton = automaton_SHO
                 break;
             }
-            if(next_kana == "ぇ"){
+            if (next_kana == "ぇ") {
                 automaton = automaton_SHE
                 break;
             }
@@ -315,6 +320,18 @@ function setAutomaton(target_kana){
             automaton = automaton_NA;
             break;
         case "に":
+            if (next_kana == "ゃ") {
+                automaton = automaton_NYA;
+                break;
+            }
+            if (next_kana == "ゅ") {
+                automaton = automaton_NYU;
+                break;
+            }
+            if (next_kana == "ょ") {
+                automaton = automaton_NYO;
+                break;
+            }
             automaton = automaton_NI;
             break;
         case "ぬ":
@@ -330,12 +347,32 @@ function setAutomaton(target_kana){
             automaton = automaton_HA;
             break;
         case "ひ":
+            if (next_kana == "ゃ") {
+                automaton = automaton_HYA;
+                break;
+            }
+            if (next_kana == "ゅ") {
+                automaton = automaton_HYU;
+                break;
+            }
+            if (next_kana == "ょ") {
+                automaton = automaton_HYO;
+                break;
+            }
             automaton = automaton_HI;
             break;
         case "ふ":
             // 小さい「ぇ」
-            if (next_kana == "ぇ") {    
+            if (next_kana == "ぁ") {
+                automaton = automaton_FA;
+                break;
+            }
+            if (next_kana == "ぇ") {
                 automaton = automaton_FE;
+                break;
+            }
+            if (next_kana == "ぉ") {
+                automaton = automaton_FO;
                 break;
             }
             automaton = automaton_FU;
@@ -408,6 +445,38 @@ function setAutomaton(target_kana){
             break;
         case "ご":
             automaton = automaton_GO;
+            break;
+        case "ざ":
+            automaton = automaton_ZA;
+            break;
+        case "じ":
+            if (next_kana == "ゃ") {
+                automaton = automaton_JA
+                break;
+            }
+            if (next_kana == "ゅ") {
+                automaton = automaton_JU
+                break;
+            }
+            if (next_kana == "ょ") {
+                automaton = automaton_JO
+                break;
+            }
+            if (next_kana == "ぇ") {
+                automaton = automaton_JE
+                break;
+            }
+            automaton = automaton_ZI;
+            break;
+        case "ず":
+            automaton = automaton_ZU;
+            break;
+        case "ぜ":
+            automaton = automaton_ZE;
+            break;
+        case "ぞ":
+            automaton = automaton_ZO;
+            break;
         case "だ":
             automaton = automaton_DA;
             break;
@@ -438,14 +507,51 @@ function setAutomaton(target_kana){
         case "ぼ":
             automaton = automaton_BO;
             break;
+        case "ぱ":
+            automaton = automaton_PA;
+            break;
+        case "ぴ":
+            automaton = automaton_PI;
+            break;
+        case "ぷ":
+            automaton = automaton_PU;
+            break;
+        case "ぺ":
+            automaton = automaton_PE;
+            break;
+        case "ぽ":
+            automaton = automaton_PO;
+            break;
+        case "ぁ":
+            automaton = automaton_LA;
+            break;
+        case "ぃ":
+            automaton = automaton_LI;
+            break;
+        case "ぅ":
+            automaton = automaton_LU;
+            break;
         case "ぇ":
-            automaton = automaton_XE;
+            automaton = automaton_LE;
+            break;
+        case "ぉ":
+            automaton = automaton_LO;
             break;
         case "っ":
             automaton = automaton_LTU;
             break;
+        case "ゃ":
+            automaton = automaton_LYA;
+            break;
+        case "ゅ":
+            automaton = automaton_LYU;
+            break;
+        case "ょ":
+            automaton = automaton_LYO;
+            break;
         case "ー":
             automaton = automaton_LONG;
+            break;
         default:
             break;
     }
