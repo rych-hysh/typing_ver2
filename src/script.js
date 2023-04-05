@@ -1,3 +1,5 @@
+const DEBUG_MODE = false;
+
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
 var TitleScene = document.querySelector("#title_scene");
@@ -60,7 +62,6 @@ function setState(new_state) {
 function startGame() {
     resetGame();
     fetchWords(question_num).then(() => {
-        console.log('2')
         kanaUpdate();
         displayTarget();
         PlayScene.classList.remove("hide");
@@ -105,6 +106,7 @@ function init() {
     // }
     document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
     document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
+    document.querySelector('#credit').innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi"; 
     setState("loaded");
 }
 
@@ -123,14 +125,12 @@ async function fetchWords(_question_num) {
         if (length < question_num) return;
         while (indexList.length < question_num) {
             var index = Math.floor(Math.random() * length);
-            console.log(index)
             if (indexList.includes(index)) {
                 continue;
             }
             indexList.push(index);
             Wordlist.push(allWordlist[index]);
         }
-        console.log(indexList)
         target_string = Wordlist[word_index]["displaykana"];
         displayTarget(word_index);
         displayDebugInfo();
@@ -214,6 +214,7 @@ function displayTarget(index = 0) {
 }
 
 function displayDebugInfo() {
+    if(!DEBUG_MODE)return;
     let d = document.querySelector("#debugInfo");
     d.innerHTML = "";
     d.innerHTML += "prevChar: " + prev_kana + "<br />";
@@ -265,19 +266,13 @@ function resetInput() {
 }
 
 function calcScore(time) {
-    console.log(time);
     var kana_count = 0;
     Wordlist.forEach(word => {
-        console.log(word["displaykana"].length);
         kana_count += word["displaykana"].length;
     })
     document.querySelector("#tpk").innerHTML = (time / kana_count).toFixed(3);
     document.querySelector("#kpm").innerHTML = (60 * 1000 / (time / kana_count)).toFixed(3);
     document.querySelector("#crt").innerHTML = (100 * correct_key_count / (correct_key_count + wrong_key_count)).toFixed(3);
-    console.log(time / kana_count)
-    console.log(correct_key_count);
-    console.log(wrong_key_count);
-    console.log(100 * correct_key_count / (correct_key_count + wrong_key_count))
 }
 
 function resetGame(){
