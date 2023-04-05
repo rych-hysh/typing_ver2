@@ -46,7 +46,7 @@ function automaton_NN(input) {
 					state = "q_1a";
 					return ["hit", 0];
 				}
-			} else if (input == "n") {
+			} else if (input == "n" || input == "x") {
 				state = "q_1b";
 				return ["hit", 0];
 			}
@@ -56,7 +56,10 @@ function automaton_NN(input) {
 			if(input == "n"){
 				state = "q_exit";
 				return ["hit", 1]
+			}else if(prev_char == "x"){
+				return ["miss", 0]
 			}
+			
 			// 次の文字の入力に入るため特別処理
 			let next = getConsonant(next_kana);
 			if(next.length ==1 ){
