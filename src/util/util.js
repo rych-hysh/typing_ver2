@@ -14,11 +14,12 @@ function getConsonant(kana) {
 		case "そ":
 			return ["s"]
 		case "た":
-		case "ち":
 		case "つ":
 		case "て":
 		case "と":
 			return ["t"]
+		case "ち":
+			return ["t", "c"]
 		case "な":
 		case "に":
 		case "ぬ":
@@ -28,10 +29,11 @@ function getConsonant(kana) {
 
 		case "は":
 		case "ひ":
-		case "ふ":
 		case "へ":
 		case "ほ":
 			return ["h"]
+		case "ふ":
+			return ["h", "f"]
 		case "ま":
 		case "み":
 		case "む":
