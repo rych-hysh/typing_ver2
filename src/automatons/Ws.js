@@ -62,6 +62,7 @@ function automaton_NN(input) {
 			
 			// 次の文字の入力に入るため特別処理
 			let next = getConsonant(next_kana);
+			if (next_kana == undefined) return ["miss", 0];
 			if(next.length ==1 ){
 				if(next != input) return ["miss", 0];
 				kanaEnd(1)
