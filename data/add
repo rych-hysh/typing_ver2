@@ -9,8 +9,5 @@ else
 	display=$1
 	kana=$2
 fi
-echo $display
-echo $kana
 cat wordlist.json | sudo jq --arg disp $display --arg kn $kana '.|.+[{"display":$disp, "displaykana":$kn}]' > tmp.json
 sudo cp tmp.json wordlist.json
-cat wordlist.json
