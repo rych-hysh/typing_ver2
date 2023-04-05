@@ -1,6 +1,6 @@
 body{
-    background-image: url("../img/bg.jpg");
     margin: 0;
+    background-image: url("/resources/img/bg.jpg");
 }
 
 button{

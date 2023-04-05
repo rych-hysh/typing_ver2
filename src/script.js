@@ -78,9 +78,9 @@ function init() {
         alert('Web Audio API is not supported in this browser');
     }
     buffer_loader = new BufferLoader(audio_context, [
-        '/snd/type.mp3',
-        '/snd/miss.mp3',
-        '/snd/correct.mp3'
+        '/resources/snd/type.mp3',
+        '/resources/snd/miss.mp3',
+        '/resources/snd/correct.mp3'
     ], load_finished)
     buffer_loader.load();
 
