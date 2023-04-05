@@ -267,7 +267,7 @@ function automaton_TYA(input) {
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state == "q_exit"
+				state = "q_exit"
 				return ["hit", 1]
 			}
 			return ["miss", 0]
@@ -310,7 +310,7 @@ function automaton_TYU(input) {
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state == "q_exit"
+				state = "q_exit"
 				return ["hit", 1]
 			}
 			return ["miss", 0]
@@ -353,7 +353,7 @@ function automaton_TYE(input) {
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state == "q_exit"
+				state = "q_exit"
 				return ["hit", 1]
 			}
 			return ["miss", 0]
@@ -378,7 +378,7 @@ function automaton_TYE(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_TYA(input) {
+function automaton_TYO(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "t") {
@@ -396,7 +396,7 @@ function automaton_TYA(input) {
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state == "q_exit"
+				state = "q_exit"
 				return ["hit", 1]
 			}
 			return ["miss", 0]
