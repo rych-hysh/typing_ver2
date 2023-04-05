@@ -300,7 +300,7 @@ function automaton_SHE(input) {
 			}
 			return ["miss", 0]
 		case "q_1":
-			if (input == "h") {
+			if (input == "h" || input == "y") {
 				state = "q_2"
 				return ["hit", 0]
 			}
