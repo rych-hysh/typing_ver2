@@ -72,8 +72,8 @@
     "displaykana": "しぇるすくりぷと"
   },
   {
-    "display": "学びて時に此れを習う",
-    "displaykana": "まなびてときにこれをならう"
+    "display": "子曰く、学びて時に此れを習う",
+    "displaykana": "しいわく、まなびてときにこれをならう"
   },
   {
     "display": "座右の銘などない",
@@ -118,5 +118,9 @@
   {
     "display": "パワー",
     "displaykana": "ぱわー"
+  },
+  {
+    "display": "お腹すいたぁ",
+    "displaykana": "おなかすいたぁ"
   }
 ]
