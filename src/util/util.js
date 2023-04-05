@@ -351,6 +351,9 @@ function setAutomaton(target_kana) {
 		case "ー":
 			automaton = automaton_LONG;
 			break;
+		case "、":
+			automaton = automaton_TOTEN;
+			break;
 		default:
 			break;
 	}
