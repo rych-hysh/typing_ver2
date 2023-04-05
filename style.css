@@ -1,5 +1,6 @@
 body{
     background-image: url("../img/bg.jpg");
+    margin: 0;
 }
 
 button{
@@ -32,6 +33,7 @@ button{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    padding: 10px;
     background-color: rgba(200, 255, 200, 0.3);
     border-radius: 5px;
     backdrop-filter: blur(3px);
@@ -45,7 +47,6 @@ button{
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
-    margin-bottom: 30px;
     font-size: large;
     background-color: rgba(230, 255, 230, 0.45);
     border-radius: 5px;
@@ -53,7 +54,7 @@ button{
 }
 
 .scene_button:hover{
-    transform: scale(1.1);
+    transform: scale(1.03);
     box-shadow: 4px 4px 4px #fff;
 }
 
@@ -66,7 +67,8 @@ button{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #problem_display_block{
@@ -103,6 +105,21 @@ button{
     width: 500px;
 }
 
+.res_label {
+    display: inline-block;
+    width: 200px;
+}
+
+.res_box {
+    display: inline-block;
+    width: 150px;
+}
+
+.unit_label{
+    display: inline-block;
+    width: 100px;    
+}
+
 #debugInfo{
     background-color: rgba(180, 180, 240, 0.3);
     border-radius: 5px;
@@ -114,4 +131,12 @@ button{
 
 .hide{
     display: none !important;
+}
+
+#credit {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+position: absolute;
+bottom: 0;
 }

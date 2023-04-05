@@ -1,3 +1,346 @@
+function isVowel(kana) {
+	if (kana == "あ" || kana == "い" || kana == "う" || kana == "え" || kana == "お") return true;
+	return false;
+}
+function isNstart(kana) {
+	if (kana == "な" || kana == "に" || kana == "ぬ" || kana == "ね" || kana == "の") return true;
+	return false;
+}
+
+//TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
+function setAutomaton(target_kana){
+	var automaton;
+	switch (target_kana) {
+			case "あ":
+					automaton = automaton_A;
+					break;
+			case "い":
+					automaton = automaton_I;
+					break;
+			case "う":
+					automaton = automaton_U;
+					break;
+			case "え":
+					automaton = automaton_E;
+					break;
+			case "お":
+					automaton = automaton_O;
+					break;
+			case "か":
+					automaton = automaton_KA;
+					break;
+			case "き":
+					if (next_kana == "ゃ") {
+							automaton = automaton_KYA
+							break;
+					}
+					if (next_kana == "ゅ") {
+							automaton = automaton_KYU
+							break;
+					}
+					if (next_kana == "ょ") {
+							automaton = automaton_KYO
+							break;
+					}
+					automaton = automaton_KI;
+					break;
+			case "く":
+					automaton = automaton_KU;
+					break;
+			case "け":
+					automaton = automaton_KE;
+					break;
+			case "こ":
+					automaton = automaton_KO;
+					break;
+			case "さ":
+					automaton = automaton_SA;
+					break;
+			case "し":
+					if (next_kana == "ゃ") {
+							automaton = automaton_SHA
+							break;
+					}
+					if (next_kana == "ゅ") {
+							automaton = automaton_SHU
+							break;
+					}
+					if (next_kana == "ょ") {
+							automaton = automaton_SHO
+							break;
+					}
+					if (next_kana == "ぇ") {
+							automaton = automaton_SHE
+							break;
+					}
+					automaton = automaton_SI;
+					break;
+			case "す":
+					automaton = automaton_SU;
+					break;
+			case "せ":
+					automaton = automaton_SE;
+					break;
+			case "そ":
+					automaton = automaton_SO;
+					break;
+			case "た":
+					automaton = automaton_TA;
+					break;
+			case "ち":
+					automaton = automaton_TI;
+					break;
+			case "つ":
+					automaton = automaton_TU;
+					break;
+			case "て":
+					automaton = automaton_TE;
+					break;
+			case "と":
+					automaton = automaton_TO;
+					break;
+			case "な":
+					automaton = automaton_NA;
+					break;
+			case "に":
+					if (next_kana == "ゃ") {
+							automaton = automaton_NYA;
+							break;
+					}
+					if (next_kana == "ゅ") {
+							automaton = automaton_NYU;
+							break;
+					}
+					if (next_kana == "ょ") {
+							automaton = automaton_NYO;
+							break;
+					}
+					automaton = automaton_NI;
+					break;
+			case "ぬ":
+					automaton = automaton_NU;
+					break;
+			case "ね":
+					automaton = automaton_NE;
+					break;
+			case "の":
+					automaton = automaton_NO;
+					break;
+			case "は":
+					automaton = automaton_HA;
+					break;
+			case "ひ":
+					if (next_kana == "ゃ") {
+							automaton = automaton_HYA;
+							break;
+					}
+					if (next_kana == "ゅ") {
+							automaton = automaton_HYU;
+							break;
+					}
+					if (next_kana == "ょ") {
+							automaton = automaton_HYO;
+							break;
+					}
+					automaton = automaton_HI;
+					break;
+			case "ふ":
+					// 小さい「ぇ」
+					if (next_kana == "ぁ") {
+							automaton = automaton_FA;
+							break;
+					}
+					if (next_kana == "ぇ") {
+							automaton = automaton_FE;
+							break;
+					}
+					if (next_kana == "ぉ") {
+							automaton = automaton_FO;
+							break;
+					}
+					automaton = automaton_FU;
+					break;
+			case "へ":
+					automaton = automaton_HE;
+					break;
+			case "ほ":
+					automaton = automaton_HO;
+					break;
+			case "ま":
+					automaton = automaton_MA;
+					break;
+			case "み":
+					automaton = automaton_MI;
+					break;
+			case "む":
+					automaton = automaton_MU;
+					break;
+			case "め":
+					automaton = automaton_ME;
+					break;
+			case "も":
+					automaton = automaton_MO;
+					break;
+			case "や":
+					automaton = automaton_YA;
+					break;
+			case "ゆ":
+					automaton = automaton_YU;
+					break;
+			case "よ":
+					automaton = automaton_YO;
+					break;
+			case "ら":
+					automaton = automaton_RA;
+					break;
+			case "り":
+					automaton = automaton_RI;
+					break;
+			case "る":
+					automaton = automaton_RU;
+					break;
+			case "れ":
+					automaton = automaton_RE;
+					break;
+			case "ろ":
+					automaton = automaton_RO;
+					break;
+			case "わ":
+					automaton = automaton_WA;
+					break;
+			case "を":
+					automaton = automaton_WO;
+					break;
+			case "ん":
+					automaton = automaton_NN;
+					break;
+			case "が":
+					automaton = automaton_GA;
+					break;
+			case "ぎ":
+					automaton = automaton_GI;
+					break;
+			case "ぐ":
+					automaton = automaton_GU;
+					break;
+			case "げ":
+					automaton = automaton_GE;
+					break;
+			case "ご":
+					automaton = automaton_GO;
+					break;
+			case "ざ":
+					automaton = automaton_ZA;
+					break;
+			case "じ":
+					if (next_kana == "ゃ") {
+							automaton = automaton_JA
+							break;
+					}
+					if (next_kana == "ゅ") {
+							automaton = automaton_JU
+							break;
+					}
+					if (next_kana == "ょ") {
+							automaton = automaton_JO
+							break;
+					}
+					if (next_kana == "ぇ") {
+							automaton = automaton_JE
+							break;
+					}
+					automaton = automaton_ZI;
+					break;
+			case "ず":
+					automaton = automaton_ZU;
+					break;
+			case "ぜ":
+					automaton = automaton_ZE;
+					break;
+			case "ぞ":
+					automaton = automaton_ZO;
+					break;
+			case "だ":
+					automaton = automaton_DA;
+					break;
+			case "ぢ":
+					automaton = automaton_DI;
+					break;
+			case "づ":
+					automaton = automaton_DU;
+					break;
+			case "で":
+					automaton = automaton_DE;
+					break;
+			case "ど":
+					automaton = automaton_DO;
+					break;
+			case "ば":
+					automaton = automaton_BA;
+					break;
+			case "び":
+					automaton = automaton_BI;
+					break;
+			case "ぶ":
+					automaton = automaton_BU;
+					break;
+			case "べ":
+					automaton = automaton_BE;
+					break;
+			case "ぼ":
+					automaton = automaton_BO;
+					break;
+			case "ぱ":
+					automaton = automaton_PA;
+					break;
+			case "ぴ":
+					automaton = automaton_PI;
+					break;
+			case "ぷ":
+					automaton = automaton_PU;
+					break;
+			case "ぺ":
+					automaton = automaton_PE;
+					break;
+			case "ぽ":
+					automaton = automaton_PO;
+					break;
+			case "ぁ":
+					automaton = automaton_LA;
+					break;
+			case "ぃ":
+					automaton = automaton_LI;
+					break;
+			case "ぅ":
+					automaton = automaton_LU;
+					break;
+			case "ぇ":
+					automaton = automaton_LE;
+					break;
+			case "ぉ":
+					automaton = automaton_LO;
+					break;
+			case "っ":
+					automaton = automaton_LTU;
+					break;
+			case "ゃ":
+					automaton = automaton_LYA;
+					break;
+			case "ゅ":
+					automaton = automaton_LYU;
+					break;
+			case "ょ":
+					automaton = automaton_LYO;
+					break;
+			case "ー":
+					automaton = automaton_LONG;
+					break;
+			default:
+					break;
+	}
+	return automaton;
+}
+
 function getConsonant(kana) {
 	if (isVowel(kana)) return null;
 	switch (kana) {
@@ -126,3 +469,4 @@ function playSound(buffer) {
 	source.start(0); // play the source now
 	// note: on older systems, may have to use deprecated noteOn(time);
 }
+
