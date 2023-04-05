@@ -1,42 +1,122 @@
 [
-    {
-        "display": "フェンダーのエレキギター",
-        "displaykana": "ふぇんだーのえれきぎたー"
-    },
-    {
-        "display": "障害物競走",
-        "displaykana": "しょうがいぶつきょうそう"
-    },
-    {
-        "display": "発展途上国",
-        "displaykana": "はってんとじょうこく"
-    },
-    {
-        "display": "夏の夜空",
-        "displaykana": "なつのよぞら"
-    },
-    {
-        "display": "人間万事塞翁が馬",
-        "displaykana": "にんげんばんじさいおうがうま"
-    },
-    {
-        "display": "天上天下唯我独尊",
-        "displaykana": "てんじょうてんげゆいがどくそん"
-    },
-    {
-        "display": "進入禁止",
-        "displaykana": "しんにゅうきんし"
-    },
-    {
-        "display": "三位一体",
-        "displaykana": "さんみいったい"
-    },
-    {
-        "display": "選択範囲",
-        "displaykana": "せんたくはんい"
-    },
-    {
-        "display": "一攫千金ん",
-        "displaykana": "いっかくせんきん"
-    }
+  {
+    "display": "フェンダーのエレキギター",
+    "displaykana": "ふぇんだーのえれきぎたー"
+  },
+  {
+    "display": "障害物競走",
+    "displaykana": "しょうがいぶつきょうそう"
+  },
+  {
+    "display": "発展途上国",
+    "displaykana": "はってんとじょうこく"
+  },
+  {
+    "display": "夏の夜空",
+    "displaykana": "なつのよぞら"
+  },
+  {
+    "display": "人間万事塞翁が馬",
+    "displaykana": "にんげんばんじさいおうがうま"
+  },
+  {
+    "display": "天上天下唯我独尊",
+    "displaykana": "てんじょうてんげゆいがどくそん"
+  },
+  {
+    "display": "進入禁止",
+    "displaykana": "しんにゅうきんし"
+  },
+  {
+    "display": "三位一体",
+    "displaykana": "さんみいったい"
+  },
+  {
+    "display": "選択範囲",
+    "displaykana": "せんたくはんい"
+  },
+  {
+    "display": "一攫千金",
+    "displaykana": "いっかくせんきん"
+  },
+  {
+    "display": "鯛",
+    "displaykana": "たい"
+  },
+  {
+    "display": "海老",
+    "displaykana": "えび"
+  },
+  {
+    "display": "映画を見よう",
+    "displaykana": "えいがをみよう"
+  },
+  {
+    "display": "炎上商法",
+    "displaykana": "えんじょうしょうほう"
+  },
+  {
+    "display": "情報社会",
+    "displaykana": "じょうほうしゃかい"
+  },
+  {
+    "display": "学歴主義者",
+    "displaykana": "がくれきしゅぎしゃ"
+  },
+  {
+    "display": "声に出して読みたい日本語",
+    "displaykana": "こえにだしてよみたいにほんご"
+  },
+  {
+    "display": "シェルスクリプト",
+    "displaykana": "しぇるすくりぷと"
+  },
+  {
+    "display": "学びて時に此れを習う",
+    "displaykana": "まなびてときにこれをならう"
+  },
+  {
+    "display": "座右の銘などない",
+    "displaykana": "ざゆうのめいなどない"
+  },
+  {
+    "display": "雨降って地固まる",
+    "displaykana": "あめふってじかたまる"
+  },
+  {
+    "display": "自慢高慢馬鹿のうち",
+    "displaykana": "じまんこうまんばかのうち"
+  },
+  {
+    "display": "楽しまずして何の人生ぞや",
+    "displaykana": "たのしまずせずしてなんのじんせいぞや"
+  },
+  {
+    "display": "有言実行",
+    "displaykana": "ゆうげんじっこう"
+  },
+  {
+    "display": "コッペパン",
+    "displaykana": "こっぺぱん"
+  },
+  {
+    "display": "レプリカ",
+    "displaykana": "れぷりか"
+  },
+  {
+    "display": "限界集落",
+    "displaykana": "げんかいしゅうらく"
+  },
+  {
+    "display": "日々反省日々成長",
+    "displaykana": "ひびはんせいひびせいちょう"
+  },
+  {
+    "display": "日々反省日々成長することは前に進むこと",
+    "displaykana": "ひびはんせいひびせいちょうすることはまえにすすむこと"
+  },
+  {
+    "display": "パワー",
+    "displaykana": "ぱわー"
+  }
 ]
