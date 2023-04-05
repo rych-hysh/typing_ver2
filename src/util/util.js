@@ -442,6 +442,12 @@ function getConsonant(kana) {
 		case "べ":
 		case "ぼ":
 			return ["b"]
+		case "ぱ":
+		case "ぴ":
+		case "ぷ":
+		case "ぺ":
+		case "ぽ":
+			return ["p"]
 		default:
 			break;
 	}
