@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+if [ $# -ne 2 ]
+then
+	echo "出題文字列を入力："
+	read display
+	echo "かな表記の出題文字列を入力："
+	read kana
+else
+	display=$1
+	kana=$2
+fi
+echo $display
+echo $kana
+cat wordlist.json | sudo jq --arg disp $display --arg kn $kana '.|.+[{"display":$disp, "displaykana":$kn}]' > tmp.json
+sudo cp tmp.json wordlist.json
+cat wordlist.json
