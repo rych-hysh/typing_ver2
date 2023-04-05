@@ -1,5 +1,8 @@
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
+var TitleScene = document.querySelector("#title_scene");
+var PlayScene = document.querySelector("#playing_scene");
+var ResultScene = document.querySelector("#result_scene");
 
 var game_state = "loading";
 
@@ -11,8 +14,9 @@ var dupulicate_wrong_gurad = false;
 
 var target_string;
 
-var Wordlist;
+var Wordlist = [];
 var word_index = 0;
+var question_num = 10;
 
 var prev_kana;
 var target_kana;
@@ -24,21 +28,16 @@ var state = "q_init";
 
 var kana_index = 0;
 
-let type_snd = document.querySelector("#type");
 let type_sound_buffer;
 let miss_sound_buffer;
 let correct_sound_buffer;
 
-const WordListRequest = new Request('data/testdata.json');
-const BackendRequest = new Request('https://test.hryoichi.com/ver2/src/automaton.php')
+const WordListRequest = new Request('data/wordlist.json');
 
-function setState(new_state){
+function setState(new_state) {
     state = "q_init";
     word_index = 0;
     resetInput();
-    const TitleScene = document.querySelector("#title_scene");
-    const PlayScene = document.querySelector("#playing_scene");
-    const ResultScene = document.querySelector("#result_scene");
     switch (new_state) {
         case "loaded":
             PlayScene.classList.add("hide");
@@ -46,19 +45,10 @@ function setState(new_state){
             ResultScene.classList.add("hide");
             break;
         case "playing":
-            kanaUpdate();
-            displayTarget();
-            PlayScene.classList.remove("hide");
-            TitleScene.classList.add("hide");
-            ResultScene.classList.add("hide");
-            play_start_time = Date.now();
+            startGame();
             break;
         case "result":
-            play_finish_time = Date.now();
-            calcScore(play_finish_time - play_start_time);
-            PlayScene.classList.add("hide");
-            TitleScene.classList.add("hide");
-            ResultScene.classList.remove("hide");
+            showResult();
             break;
         default:
             new_state = "loaded";
@@ -67,8 +57,30 @@ function setState(new_state){
     game_state = new_state;
 }
 
-function init() {
+function startGame() {
+    resetGame();
+    fetchWords(question_num).then(() => {
+        console.log('2')
+        kanaUpdate();
+        displayTarget();
+        PlayScene.classList.remove("hide");
+        TitleScene.classList.add("hide");
+        ResultScene.classList.add("hide");
+        play_start_time = Date.now();
+    })
+}
 
+function showResult() {
+    play_finish_time = Date.now();
+    calcScore(play_finish_time - play_start_time);
+    PlayScene.classList.add("hide");
+    TitleScene.classList.add("hide");
+    ResultScene.classList.remove("hide");
+}
+function init() {
+    TitleScene = document.querySelector("#title_scene");
+    PlayScene = document.querySelector("#playing_scene");
+    ResultScene = document.querySelector("#result_scene");
 
     //効果音の読み込み    
     try {
@@ -94,39 +106,63 @@ function init() {
     document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
     document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
     setState("loaded");
-    fetchWords()
 }
 
-function fetchWords(){
+async function fetchWords(_question_num) {
     const GetHeader = new Headers();
     GetHeader.append('Content-Type', 'application/json')
     const GetInit = {
         method: "GET",
         headers: GetHeader
     }
-    fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
-        Wordlist = data;
+    await fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
+        var allWordlist = data;
+        var length = allWordlist.length;
+        var indexList = [];
+        Wordlist = [];
+        if (length < question_num) return;
+        while (indexList.length < question_num) {
+            var index = Math.floor(Math.random() * length);
+            console.log(index)
+            if (indexList.includes(index)) {
+                continue;
+            }
+            indexList.push(index);
+            Wordlist.push(allWordlist[index]);
+        }
+        console.log(indexList)
         target_string = Wordlist[word_index]["displaykana"];
         displayTarget(word_index);
         displayDebugInfo();
+        return;
     });
 }
 
 function keydown(e) {
-    if(e.key == "Escape"){
+    if (e.key == "Escape") {
         setState("loaded");
         return;
     }
-    if(game_state == "loaded"){
-        if(e.key == "Enter"){
-            setState("playing");
-            return;
-        }
+    switch (game_state) {
+        case "loaded":
+            if (e.key == "Enter") {
+                setState("playing");
+                return;
+            }
+            break;
+        case "playing":
+            //大文字小文字を区別しない。英語入力時に困ったら修正する。
+            typed(e.key.toLowerCase());
+            break;
+        case "result":
+            if(e.key == "Enter") {
+                setState("loaded");
+                return;
+            }
+        default:
+            break;
     }
-    if(game_state == "playing"){
-        //大文字小文字を区別しない。英語入力時に困ったら修正する。
-        typed(e.key.toLowerCase());
-    }
+
 }
 
 /*
@@ -152,7 +188,7 @@ function typed(input) {
         dupulicate_wrong_gurad = false;
         prev_char = input;
         inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-            if (kana_index >= target_string.length - 1 && state == "q_exit") {
+        if (kana_index >= target_string.length - 1 && state == "q_exit") {
             wordEnd();
         } else if (state == "q_exit") {
             kanaEnd(res[1]);
@@ -160,11 +196,11 @@ function typed(input) {
             playSound(type_sound_buffer);
         }
     } else {
-        if(!dupulicate_wrong_gurad)wrong_key_count++;
+        if (!dupulicate_wrong_gurad) wrong_key_count++;
         dupulicate_wrong_gurad = true;
         playSound(miss_sound_buffer);
         const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1)  inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
+        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
@@ -199,7 +235,7 @@ function kanaUpdate() {
 function kanaEnd(skipKanaCount) {
     playSound(type_sound_buffer);
     kana_index += skipKanaCount;
-    if(kana_index >= target_string.length){
+    if (kana_index >= target_string.length) {
         wordEnd();
         return;
     }
@@ -213,7 +249,7 @@ function wordEnd() {
     playSound(correct_sound_buffer);
     resetInput();
     word_index++;
-    if(word_index == Wordlist.length){
+    if (word_index == Wordlist.length) {
         setState("result");
         return;
     }
@@ -222,24 +258,47 @@ function wordEnd() {
     displayDebugInfo();
 }
 
-function resetInput(){
+function resetInput() {
     kana_index = 0;
     state = "q_init"
     document.querySelector("#input").innerHTML = "";
 }
 
-function calcScore(time){
+function calcScore(time) {
     console.log(time);
     var kana_count = 0;
     Wordlist.forEach(word => {
         console.log(word["displaykana"].length);
         kana_count += word["displaykana"].length;
     })
-    document.querySelector("#tpk").innerHTML = (time/kana_count).toFixed(3);
-    document.querySelector("#kpm").innerHTML = (60*1000/(time/kana_count)).toFixed(3);
-    document.querySelector("#crt").innerHTML = (100*correct_key_count/(correct_key_count + wrong_key_count)).toFixed(3);
-    console.log(time/kana_count)
+    document.querySelector("#tpk").innerHTML = (time / kana_count).toFixed(3);
+    document.querySelector("#kpm").innerHTML = (60 * 1000 / (time / kana_count)).toFixed(3);
+    document.querySelector("#crt").innerHTML = (100 * correct_key_count / (correct_key_count + wrong_key_count)).toFixed(3);
+    console.log(time / kana_count)
     console.log(correct_key_count);
     console.log(wrong_key_count);
-    console.log(100*correct_key_count/(correct_key_count + wrong_key_count))
+    console.log(100 * correct_key_count / (correct_key_count + wrong_key_count))
+}
+
+function resetGame(){
+    play_start_time;
+    play_finish_time;
+    correct_key_count = 0;
+    wrong_key_count = 0;
+    dupulicate_wrong_gurad = false;
+
+    target_string = "";
+
+    Wordlist = [];
+    word_index = 0;
+
+    prev_kana = "";
+    target_kana = "";
+    next_kana = "";
+
+    prev_char = "";
+
+    state = "q_init";
+
+    kana_index = 0;
 }
