@@ -34,6 +34,8 @@ let type_sound_buffer;
 let miss_sound_buffer;
 let correct_sound_buffer;
 
+var sound_volume = 1;
+
 const WordListRequest = new Request('data/wordlist.json');
 
 function setState(new_state) {
@@ -106,6 +108,16 @@ function init() {
     // }
     document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
     document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
+    document.querySelector("#mute_button").addEventListener("click", () =>{
+        sound_volume=0;
+        document.querySelector('#mute_button').classList.add('volume_active');
+        document.querySelector('#unmute_button').classList.remove('volume_active');
+    });
+    document.querySelector("#unmute_button").addEventListener("click", () => {
+        sound_volume=1;
+        document.querySelector('#unmute_button').classList.add('volume_active');
+        document.querySelector('#mute_button').classList.remove('volume_active');
+    });
     document.querySelector('#credit').innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi"; 
     setState("loaded");
 }
@@ -193,12 +205,12 @@ function typed(input) {
         } else if (state == "q_exit") {
             kanaEnd(res[1]);
         } else {
-            playSound(type_sound_buffer);
+            playSound(type_sound_buffer, sound_volume);
         }
     } else {
         if (!dupulicate_wrong_gurad) wrong_key_count++;
         dupulicate_wrong_gurad = true;
-        playSound(miss_sound_buffer);
+        playSound(miss_sound_buffer, sound_volume);
         const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
         if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
@@ -234,20 +246,20 @@ function kanaUpdate() {
 }
 
 function kanaEnd(skipKanaCount) {
-    playSound(type_sound_buffer);
+    playSound(type_sound_buffer, sound_volume);
     kana_index += skipKanaCount;
     if (kana_index >= target_string.length) {
         wordEnd();
         return;
     }
-    playSound(type_sound_buffer);
+    playSound(type_sound_buffer, sound_volume);
     state = "q_init";
 
     displayDebugInfo();
 }
 
 function wordEnd() {
-    playSound(correct_sound_buffer);
+    playSound(correct_sound_buffer, sound_volume);
     resetInput();
     word_index++;
     if (word_index == Wordlist.length) {

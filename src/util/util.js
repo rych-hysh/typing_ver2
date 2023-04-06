@@ -489,11 +489,18 @@ function load_finished(arg_buffer_list) {
 	miss_sound_buffer = arg_buffer_list[1];
 	correct_sound_buffer = arg_buffer_list[2];
 }
-function playSound(buffer) {
+function playSound(buffer, volume = 1) {
 	var source = audio_context.createBufferSource(); // creates a sound source
+	var gain = audio_context.createGain();
+	gain.gain.value = volume;
 	source.buffer = buffer; // tell the source which sound to play
-	source.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
+	source.connect(gain);
+	console.log(gain.gain.value)
+	gain.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
 	source.start(0); // play the source now
 	// note: on older systems, may have to use deprecated noteOn(time);
 }
 
+// function muteSound(){
+
+// }
