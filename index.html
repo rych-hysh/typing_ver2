@@ -16,10 +16,26 @@
     <script src="src/automatons/EXs.js" type="text/javascript"></script>
     <script src="src/script.js" type="text/javascript"></script>
     <link href="style.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 </head>
 
 <body>
+    <div id="configs">
+        <div id="config_inner">
+                    <button id="mute_button" class="volume_buttons">
+            <span id="icon_muted" class="material-symbols-outlined">
+                volume_off
+            </span>
+        </button>
+        <button id="unmute_button" class="volume_buttons volume_active">
+            <span id="icon_voluemed" class="material-symbols-outlined">
+                volume_up
+            </span>
+        </button>
+        </div>
+
+    </div>
     <div id="title_scene" class="scene">
         <div id="title_display_block" class="display_block">
             <h1 id="title">Typing Game v2</h1>
@@ -40,9 +56,12 @@
         <div id="result_display_block" class="display_block">
             <h1 id="result">Clear</h1>
             <div>
-                <span class="res_label">Time (ms) per kana</span>:<span id="tpk" class="res_box"></span><span class="unit_label">( ms )</span><br />
-                <span class="res_label">Key per minutes</span>:<span id="kpm" class="res_box"></span><span class="unit_label">( kpm )</span><br />
-                <span class="res_label">Correctness</span>:<span id="crt" class="res_box"></span><span class="unit_label">%</span><br />
+                <span class="res_label">Time (ms) per kana</span>:<span id="tpk" class="res_box"></span><span
+                    class="unit_label">( ms )</span><br />
+                <span class="res_label">Key per minutes</span>:<span id="kpm" class="res_box"></span><span
+                    class="unit_label">( kpm )</span><br />
+                <span class="res_label">Correctness</span>:<span id="crt" class="res_box"></span><span
+                    class="unit_label">%</span><br />
             </div>
         </div>
         <button id="back_button" class="scene_button">BACK</button>
