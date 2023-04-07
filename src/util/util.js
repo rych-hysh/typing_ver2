@@ -495,7 +495,6 @@ function playSound(buffer, volume = 1) {
 	gain.gain.value = volume;
 	source.buffer = buffer; // tell the source which sound to play
 	source.connect(gain);
-	console.log(gain.gain.value)
 	gain.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
 	source.start(0); // play the source now
 	// note: on older systems, may have to use deprecated noteOn(time);
