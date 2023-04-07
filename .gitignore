@@ -1,2 +1,2 @@
-/data/*
-!/data/template.json
+data/*
+!data/template.json
