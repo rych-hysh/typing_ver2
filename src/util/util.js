@@ -503,3 +503,21 @@ function playSound(buffer, volume = 1) {
 // function muteSound(){
 
 // }
+
+function getRankAndMessage(_score){
+	if (_score < 50){
+		return ["F", "がんばろう、、、"]
+	}else if(_score < 100){
+		return ["E", "まだまだだね、、、"]
+	}else if(_score < 200){
+		return ["D", "いい感じ！"]
+	}else if(_score < 300){
+		return ["C", "タイピングﾁｮｯﾄﾃﾞｷﾙ"]
+	}else if(_score < 400){
+		return ["B", "自信をもっていいレベル"]
+	}else if(_score < 500){
+		return ["A", "す、すごい、、、！！！"]
+	}else{
+		return ["S", "ス、スカウターが壊れた、、、！？"]
+	}
+};
