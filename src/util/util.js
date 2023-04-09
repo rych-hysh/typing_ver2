@@ -358,6 +358,12 @@ function setAutomaton(target_kana) {
 		case "、":
 			automaton = automaton_TOTEN;
 			break;
+			case "！":
+				automaton = automaton_EXCLAMATION;
+				break;
+			case "？":
+				automaton = automaton_QUESTION;
+				break;
 		default:
 			break;
 	}
