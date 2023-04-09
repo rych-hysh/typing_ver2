@@ -381,7 +381,7 @@ function automaton_FO(input) {
 	}
 }
 
-function automaton_HYA() {
+function automaton_HYA(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "h") {
@@ -411,7 +411,7 @@ function automaton_HYA() {
 	}
 }
 
-function automaton_HYU() {
+function automaton_HYU(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "h") {
@@ -441,7 +441,7 @@ function automaton_HYU() {
 	}
 }
 
-function automaton_HYO() {
+function automaton_HYO(input) {
 	switch (state) {
 		case "q_init":
 			if (input == "h") {

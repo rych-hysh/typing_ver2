@@ -1,5 +1,3 @@
-const DEBUG_MODE = false;
-
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
 var TitleScene = document.querySelector("#title_scene");
@@ -123,6 +121,13 @@ function init() {
 }
 
 async function fetchWords(_question_num) {
+    if(DEBUG_MODE){
+        Wordlist = mockWordlist;
+        target_string = Wordlist[word_index]["displaykana"];
+        displayTarget(word_index);
+        displayDebugInfo();
+        return;
+    }
     const GetHeader = new Headers();
     GetHeader.append('Content-Type', 'application/json')
     const GetInit = {

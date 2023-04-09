@@ -1,2 +1,4 @@
-data/*
-!data/template.json
+./data/*
+!./data/template.json
+./ENV/*
+!./ENV/template.js
