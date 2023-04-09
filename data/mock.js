@@ -1,10 +1,10 @@
 const mockWordlist = [
   {
-    "display": "フェンダーのエレキギター",
-    "displaykana": "ふぇんだーのえれきぎたー"
+    "display": "地球",
+    "displaykana": "ちきゅう"
   },
   {
-    "display": "障害物競走",
-    "displaykana": "しょうがいぶつきょうそう"
+    "display": "たっちたいぴんぐをきわめる",
+    "displaykana": "たっちたいぴんぐをきわめる"
   }
 ]
