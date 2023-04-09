@@ -1,6 +1,6 @@
 /data/wordlist.json
 /data/tmp.json
 !/data/template.json
-!/data/mock.json
+!/data/mock.js
 /ENV/*
 !/ENV/template.js

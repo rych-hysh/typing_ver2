@@ -226,6 +226,7 @@ function typed(input) {
         inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
+    if(DEBUG_MODE)console.log(res)
     kanaUpdate();
     displayDebugInfo();
 }
@@ -262,7 +263,6 @@ function kanaEnd(skipKanaCount) {
         wordEnd();
         return;
     }
-    playSound(type_sound_buffer, sound_volume);
     state = "q_init";
 
     displayDebugInfo();

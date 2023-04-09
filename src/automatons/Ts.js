@@ -200,18 +200,17 @@ function automaton_LTU(input) {
 				return ["hit", 0]
 			}
 			var cons = getConsonant(next_kana);
-
 			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
 				state = "q_1'"
 				return ["hit", 0]
 			}
 			if (cons.length > 1) {
-				cons.forEach(c => {
-					if (input == c) {
+				for(i in cons){
+					if (input == cons[i]) {
 						state = "q_1'"
 						return ["hit", 0]
 					}
-				})
+				}
 			}
 			return ["miss", 0]
 		case "q_1":
@@ -237,10 +236,21 @@ function automaton_LTU(input) {
 			}
 			return ["miss", 0]
 		case "q_1'":
-			if (input == getConsonant(next_kana)) {
+			console.log(getConsonant(next_kana) + "dayo")
+			var cons = getConsonant(next_kana);
+			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
 				kanaEnd(1)
 				typed(input);
-				return ["hit", 0];
+				return ["skip", 1];
+			}
+			if (cons.length > 1) {
+				for(i in cons){
+					if (input == cons[i]) {
+						kanaEnd(1)
+						typed(input);
+						return ["skip", 1];
+					}
+				}
 			}
 			return ["miss", 0]
 		default:
