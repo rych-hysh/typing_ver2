@@ -201,7 +201,7 @@ function automaton_LTU(input) {
 			}
 			var cons = getConsonant(next_kana);
 
-			if (cons.length == 1 && input == getConsonant(next_kana)) {
+			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
 				state = "q_1'"
 				return ["hit", 0]
 			}
