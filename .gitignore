@@ -1,2 +1,6 @@
+
 /data/*
 !/data/template.json
+!/data/mock.json
+/ENV/*
+!/ENV/template.js
