@@ -287,9 +287,15 @@ function calcScore(time) {
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
     })
+    let kpm = 60 * 1000 / (time / (kana_count * 2));
+    let correctness = 100 * correct_key_count / (correct_key_count + wrong_key_count);
+    let score = kpm * correctness / 100;
+    res = getRankAndMessage(score);
+    document.querySelector("#rank").innerHTML = res[0];
+    document.querySelector("#message").innerHTML = res[1];
     document.querySelector("#tpk").innerHTML = (time / kana_count).toFixed(3);
-    document.querySelector("#kpm").innerHTML = (60 * 1000 / (time / kana_count)).toFixed(3);
-    document.querySelector("#crt").innerHTML = (100 * correct_key_count / (correct_key_count + wrong_key_count)).toFixed(3);
+    document.querySelector("#kpm").innerHTML = kpm.toFixed(3);
+    document.querySelector("#crt").innerHTML = correctness.toFixed(3);
 }
 
 function resetGame(){
