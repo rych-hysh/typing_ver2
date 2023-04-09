@@ -1,5 +1,3 @@
-const DEBUG_MODE = false;
-
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
 var TitleScene = document.querySelector("#title_scene");
