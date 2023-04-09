@@ -431,3 +431,33 @@ function automaton_TYO(input) {
 			return ["miss", 0];
 	}
 }
+
+function automaton_THI(input){
+	switch (state) {
+		case "q_init":
+			if(input == "t"){
+				state = "q_1"
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_1":
+			if(input == "h"){
+				state = "q_2"
+				return ["hit", 0]	
+			}
+			if(input == "e") {
+				state = "q_exit"
+				return ["hit", 1]	
+			}
+			return ["miss", 0]
+		case "q_2":
+			if(input == "i"){
+				state = "q_exit";
+				return ["hit", 2]
+			}
+			return ["miss", 0]
+			default:
+				console.log("unexpected error");
+				return ["miss", 0];
+	}
+}

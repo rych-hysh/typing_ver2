@@ -110,6 +110,10 @@ function setAutomaton(target_kana) {
 			automaton = automaton_TU;
 			break;
 		case "て":
+			if (next_kana == "ぃ") {
+				automaton = automaton_THI;
+				break;
+			}
 			automaton = automaton_TE;
 			break;
 		case "と":
@@ -354,6 +358,12 @@ function setAutomaton(target_kana) {
 		case "、":
 			automaton = automaton_TOTEN;
 			break;
+			case "！":
+				automaton = automaton_EXCLAMATION;
+				break;
+			case "？":
+				automaton = automaton_QUESTION;
+				break;
 		default:
 			break;
 	}

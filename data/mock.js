@@ -1,7 +1,7 @@
 const mockWordlist = [
   {
     "display": "地球",
-    "displaykana": "ちきゅう"
+    "displaykana": "てぃふぁにー"
   },
   {
     "display": "たっちたいぴんぐをきわめる",
