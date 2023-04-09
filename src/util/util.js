@@ -495,7 +495,6 @@ function playSound(buffer, volume = 1) {
 	gain.gain.value = volume;
 	source.buffer = buffer; // tell the source which sound to play
 	source.connect(gain);
-	console.log(gain.gain.value)
 	gain.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
 	source.start(0); // play the source now
 	// note: on older systems, may have to use deprecated noteOn(time);
@@ -504,3 +503,21 @@ function playSound(buffer, volume = 1) {
 // function muteSound(){
 
 // }
+
+function getRankAndMessage(_score){
+	if (_score < 50){
+		return ["F", "がんばろう、、、"]
+	}else if(_score < 100){
+		return ["E", "まだまだだね、、、"]
+	}else if(_score < 200){
+		return ["D", "いい感じ！"]
+	}else if(_score < 300){
+		return ["C", "タイピングﾁｮｯﾄﾃﾞｷﾙ"]
+	}else if(_score < 400){
+		return ["B", "自信をもっていいレベル"]
+	}else if(_score < 500){
+		return ["A", "す、すごい、、、！！！"]
+	}else{
+		return ["S", "ス、スカウターが壊れた、、、！？"]
+	}
+};
