@@ -199,7 +199,12 @@ function typed(input) {
     let res = automaton(input);
     let latest = inputDisplay.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
-    if (res[0] == "skip") return;
+    if (res[0] == "skip") {
+        const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"correct_char");
+        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
+        inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
+        return;
+    }
     if (res[0] == "hit") {
         correct_key_count++;
         dupulicate_wrong_gurad = false;
