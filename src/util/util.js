@@ -238,6 +238,18 @@ function setAutomaton(target_kana) {
 			automaton = automaton_GA;
 			break;
 		case "ぎ":
+			if (next_kana == "ゃ") {
+				automaton = automaton_GYA
+				break;
+			}
+			if (next_kana == "ゅ") {
+				automaton = automaton_GYU
+				break;
+			}
+			if (next_kana == "ょ") {
+				automaton = automaton_GYO
+				break;
+			}
 			automaton = automaton_GI;
 			break;
 		case "ぐ":
