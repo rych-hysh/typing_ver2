@@ -1,9 +1,9 @@
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
-var TitleScene = document.querySelector("#title_scene");
-var PlayScene = document.querySelector("#playing_scene");
-var ResultScene = document.querySelector("#result_scene");
-
+var TitleScene
+var PlayScene
+var ResultScene
+var inputDisplay
 var game_state = "loading";
 
 var play_start_time;
@@ -82,6 +82,7 @@ function init() {
     TitleScene = document.querySelector("#title_scene");
     PlayScene = document.querySelector("#playing_scene");
     ResultScene = document.querySelector("#result_scene");
+    inputDisplay = document.querySelector("#input");
 
     //効果音の読み込み    
     try {
@@ -190,7 +191,6 @@ target_kana     仮名表記の課題文字
 next_kana       仮名表記の次の課題文字
 */
 function typed(input) {
-    const inputDisplay = document.querySelector("#input");
     document.querySelectorAll(".wrong_char").forEach(w => w.remove());
 
 
@@ -206,29 +206,36 @@ function typed(input) {
         return;
     }
     if (res[0] == "hit") {
-        correct_key_count++;
-        dupulicate_wrong_gurad = false;
-        prev_char = input;
-        inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-        if (kana_index >= target_string.length - 1 && state == "q_exit") {
-            wordEnd();
-        } else if (state == "q_exit") {
-            kanaEnd(res[1]);
-        } else {
-            playSound(type_sound_buffer, sound_volume);
-        }
+        keyHit(input, res[1]);
     } else {
-        if (!dupulicate_wrong_gurad) wrong_key_count++;
-        dupulicate_wrong_gurad = true;
-        playSound(miss_sound_buffer, sound_volume);
-        const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
-        inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
-
+        keyMiss(input);
     };
     if(DEBUG_MODE)console.log(res)
     kanaUpdate();
     displayDebugInfo();
+}
+
+function keyHit(input, skipKanaCount){
+    correct_key_count++;
+    dupulicate_wrong_gurad = false;
+    prev_char = input;
+    inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
+    if (kana_index >= target_string.length - 1 && state == "q_exit") {
+        wordEnd();
+    } else if (state == "q_exit") {
+        kanaEnd(skipKanaCount);
+    } else {
+        playSound(type_sound_buffer, sound_volume);
+    }
+}
+
+function keyMiss(input){
+    if (!dupulicate_wrong_gurad) wrong_key_count++;
+    dupulicate_wrong_gurad = true;
+    playSound(miss_sound_buffer, sound_volume);
+    const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
+    if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
+    inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 }
 
 function displayTarget(index = 0) {
