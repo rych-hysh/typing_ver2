@@ -12,7 +12,6 @@ export class automaton {
     state: string = "";
     prev_char: string = "";
     next_kana: string = "";
-
 }
 
 enum GameState {
