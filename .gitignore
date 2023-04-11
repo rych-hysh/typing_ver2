@@ -1,2 +1,8 @@
-/data/*
+/data/wordlist.json
+/data/tmp.json
 !/data/template.json
+!/data/mock.js
+/ENV/*
+!/ENV/template.js
+
+/node_modules/*

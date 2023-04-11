@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <script src="data/mock.js" type="text/javascript"></script>
+    <!-- <script src="data/mock.js" type="text/javascript"></script>
     <script src="ENV/develop.js" type="text/javascript"></script>
     <script src="src/util/util.js" type="text/javascript"></script>
     <script src="src/automatons/Vowels.js" type="text/javascript"></script>
@@ -17,57 +17,70 @@
     <script src="src/automatons/Rs.js" type="text/javascript"></script>
     <script src="src/automatons/Ws.js" type="text/javascript"></script>
     <script src="src/automatons/EXs.js" type="text/javascript"></script>
-    <script src="src/script.js" type="text/javascript"></script>
+    <script src="src/script.js" type="text/javascript"></script> -->
+    <script src="dist/bundled.js" type="text/javascript"></script>
     <link href="style.css" type="text/css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 </head>
 
 <body>
-    <div id="configs">
-        <div id="config_inner">
-                    <button id="mute_button" class="volume_buttons">
-            <span id="icon_muted" class="material-symbols-outlined">
-                volume_off
-            </span>
-        </button>
-        <button id="unmute_button" class="volume_buttons volume_active">
-            <span id="icon_voluemed" class="material-symbols-outlined">
-                volume_up
-            </span>
-        </button>
-        </div>
-
-    </div>
-    <div id="title_scene" class="scene">
-        <div id="title_display_block" class="display_block">
-            <h1 id="title">Typing Game v2</h1>
-        </div>
-        <button id="play_button" class="scene_button">PLAY</button>
-    </div>
-    <div id="playing_scene" class="scene hide">
-        <div id="problem_display_block" class="display_block">
-            <div id="display"></div>
-            <div id="displaykana"></div>
-        </div>
-        <div id="input_display_block" class="display_block">
-            <div id="input"></div>
-        </div>
-        <div id="debugInfo"></div>
-    </div>
-    <div id="result_scene" class="scene hide">
-        <div id="result_display_block" class="display_block">
-            <h1 id="result">Clear</h1>
-            <div>
-                <span class="res_label">Time (ms) per kana</span>:<span id="tpk" class="res_box"></span><span
-                    class="unit_label">( ms )</span><br />
-                <span class="res_label">Key per minutes</span>:<span id="kpm" class="res_box"></span><span
-                    class="unit_label">( kpm )</span><br />
-                <span class="res_label">Correctness</span>:<span id="crt" class="res_box"></span><span
-                    class="unit_label">%</span><br />
+    <div id="content">
+        <div id="configs">
+            <div id="config_inner">
+                <button id="mute_button" class="volume_buttons">
+                    <span id="icon_muted" class="material-symbols-outlined">
+                        volume_off
+                    </span>
+                </button>
+                <button id="unmute_button" class="volume_buttons volume_active">
+                    <span id="icon_voluemed" class="material-symbols-outlined">
+                        volume_up
+                    </span>
+                </button>
             </div>
+
         </div>
-        <button id="back_button" class="scene_button">BACK</button>
+        <div id="title_scene" class="scene">
+            <div id="title_display_block" class="display_block">
+                <h1 id="title">Typing Game v2</h1>
+            </div>
+            <button id="play_button" class="scene_button">PLAY<br/> <span id="playdescription">press Enter to start. </span></button>
+        </div>
+        <div id="playing_scene" class="scene hide">
+            <div id="problem_display_block" class="display_block">
+                <div id="display"></div>
+                <div id="displaykana"></div>
+            </div>
+            <div id="input_display_block" class="display_block">
+                <div id="input"></div>
+            </div>
+            <div id="debugInfo"></div>
+        </div>
+        <div id="result_scene" class="scene hide">
+            <div id="result_display_block" class="display_block">
+                <h1 id="result">Your rank is :<span id="rank"></span></h1>
+                <h3 id="message"></h3>
+                <div>
+                    <span class="res_label">Time (ms) per kana</span>:<span id="tpk" class="res_box"></span><span
+                        class="unit_label">( ms )</span><br />
+                    <span class="res_label">Key per minutes</span>:<span id="kpm" class="res_box"></span><span
+                        class="unit_label">( kpm )</span><br />
+                    <span class="res_label">Correctness</span>:<span id="crt" class="res_box"></span><span
+                        class="unit_label">%</span><br />
+                </div>
+            </div>
+            <button id="back_button" class="scene_button">BACK</button>
+        </div>
+        <div id="description">
+            <p>
+                ・Enterキーでプレイ、Escキーでタイトル画面に戻れます。
+            </p>
+            <p>
+                ・スコアは、平均KPM×正確率で計算しています。（KPM: keystrokes per minute　とは、一分間のキー入力の回数です）
+            </p>
+        </div>
     </div>
     <div id="credit">a</div>
 </body>
