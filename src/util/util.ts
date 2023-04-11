@@ -1,14 +1,14 @@
-function isVowel(kana) {
+export function isVowel(kana) {
 	if (kana == "あ" || kana == "い" || kana == "う" || kana == "え" || kana == "お") return true;
 	return false;
 }
-function isNstart(kana) {
+export function isNstart(kana) {
 	if (kana == "な" || kana == "に" || kana == "ぬ" || kana == "ね" || kana == "の") return true;
 	return false;
 }
 
 //TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
-function setAutomaton(target_kana) {
+export function setAutomaton(target_kana) {
 	var automaton;
 	switch (target_kana) {
 		case "あ":
@@ -382,7 +382,7 @@ function setAutomaton(target_kana) {
 	return automaton;
 }
 
-function getConsonant(kana) {
+export function getConsonant(kana) {
 	if (isVowel(kana)) return null;
 	switch (kana) {
 		case "か":
@@ -475,7 +475,7 @@ function getConsonant(kana) {
 	}
 }
 
-class BufferLoader {
+export class BufferLoader {
 	constructor(arg_context, arg_urlList, arg_callback) {
 		this.context = arg_context;
 		this.url_list = arg_urlList;
@@ -506,12 +506,12 @@ class BufferLoader {
 			this.loadBuffer(this.url_list[i], i);
 	}
 }
-function load_finished(arg_buffer_list) {
+export function load_finished(arg_buffer_list) {
 	type_sound_buffer = arg_buffer_list[0];
 	miss_sound_buffer = arg_buffer_list[1];
 	correct_sound_buffer = arg_buffer_list[2];
 }
-function playSound(buffer, volume = 1) {
+export function playSound(buffer, volume = 1) {
 	var source = audio_context.createBufferSource(); // creates a sound source
 	var gain = audio_context.createGain();
 	gain.gain.value = volume;
@@ -526,20 +526,20 @@ function playSound(buffer, volume = 1) {
 
 // }
 
-function getRankAndMessage(_score){
+export function getRankAndMessage(_score: number){
 	if (_score < 50){
-		return ["F", "がんばろう、、、"]
+		return {Rank: "F", Message: "がんばろう、、、"}
 	}else if(_score < 100){
-		return ["E", "まだまだだね、、、"]
+		return {Rank: "E", Message: "まだまだだね、、、"}
 	}else if(_score < 200){
-		return ["D", "いい感じ！"]
+		return {Rank: "D", Message: "いい感じ！"}
 	}else if(_score < 300){
-		return ["C", "タイピングﾁｮｯﾄﾃﾞｷﾙ"]
+		return {Rank: "C", Message: "タイピングﾁｮｯﾄﾃﾞｷﾙ"}
 	}else if(_score < 400){
-		return ["B", "自信をもっていいレベル"]
+		return {Rank: "B", Message: "自信をもっていいレベル"}
 	}else if(_score < 500){
-		return ["A", "す、すごい、、、！！！"]
+		return {Rank: "A", Message: "す、すごい、、、！！！"}
 	}else{
-		return ["S", "ス、スカウターが壊れた、、、！？"]
+		return {Rank: "S", Message: "ス、スカウターが壊れた、、、！？"}
 	}
 };

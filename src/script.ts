@@ -1,59 +1,80 @@
+import { DEBUG_MODE } from "../ENV/develop";
+import { mockWordlist } from "../data/mock";
+import {BufferLoader, getRankAndMessage, load_finished, playSound, setAutomaton} from "./util/util"
+
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
-var TitleScene = document.querySelector("#title_scene");
-var PlayScene = document.querySelector("#playing_scene");
-var ResultScene = document.querySelector("#result_scene");
+var TitleScene: HTMLElement | null;
+var PlayScene: HTMLElement | null;
+var ResultScene: HTMLElement | null;
 
-var game_state = "loading";
+enum GameState{
+    "loading",
+    "loaded",
+    "playing",
+    "result"
+}
 
-var play_start_time;
-var play_finish_time;
-var correct_key_count = 0;
-var wrong_key_count = 0;
-var dupulicate_wrong_gurad = false;
+interface WordList{
+    display: string,
+    displaykana: string
+}
 
-var target_string;
+interface RankAndMesssage {
+    Rank: string,
+    Message: string
+}
+var game_state: GameState = GameState.loading;
 
-var Wordlist = [];
-var word_index = 0;
-var question_num = 10;
+var play_start_time: number;
+var play_finish_time: number;
+var correct_key_count: number = 0;
+var wrong_key_count: number = 0;
+var dupulicate_wrong_gurad: boolean = false;
 
-var prev_kana;
-var target_kana;
-var next_kana;
+var target_string: string;
 
-var prev_char;
+var Wordlist: WordList[] = [];
+var word_index: number = 0;
+var question_num: number = 10;
+
+var prev_kana: String;
+var target_kana: String;
+var next_kana: String;
+
+var prev_char: String;
 
 var state = "q_init";
 
-var kana_index = 0;
+var kana_index: number = 0;
 
-let type_sound_buffer;
-let miss_sound_buffer;
-let correct_sound_buffer;
+let type_sound_buffer: any;
+let miss_sound_buffer: any;
+let correct_sound_buffer: any;
 
-var sound_volume = 1;
+var audio_context : AudioContext;
+var sound_volume: number = 1;
 
 const WordListRequest = new Request('data/wordlist.json');
 
-function setState(new_state) {
+function setState(new_state: GameState) {
     state = "q_init";
     word_index = 0;
     resetInput();
     switch (new_state) {
-        case "loaded":
-            PlayScene.classList.add("hide");
-            TitleScene.classList.remove("hide");
-            ResultScene.classList.add("hide");
+        case GameState.loaded:
+            PlayScene?.classList.add("hide");
+            TitleScene?.classList.remove("hide");
+            ResultScene?.classList.add("hide");
             break;
-        case "playing":
+        case GameState.playing:
             startGame();
             break;
-        case "result":
+        case GameState.result:
             showResult();
             break;
         default:
-            new_state = "loaded";
+            new_state = GameState.loaded;
             setState(new_state);
     }
     game_state = new_state;
@@ -64,9 +85,9 @@ function startGame() {
     fetchWords(question_num).then(() => {
         kanaUpdate();
         displayTarget();
-        PlayScene.classList.remove("hide");
-        TitleScene.classList.add("hide");
-        ResultScene.classList.add("hide");
+        PlayScene?.classList.remove("hide");
+        TitleScene?.classList.add("hide");
+        ResultScene?.classList.add("hide");
         play_start_time = Date.now();
     })
 }
@@ -74,9 +95,9 @@ function startGame() {
 function showResult() {
     play_finish_time = Date.now();
     calcScore(play_finish_time - play_start_time);
-    PlayScene.classList.add("hide");
-    TitleScene.classList.add("hide");
-    ResultScene.classList.remove("hide");
+    PlayScene?.classList.add("hide");
+    TitleScene?.classList.add("hide");
+    ResultScene?.classList.remove("hide");
 }
 function init() {
     TitleScene = document.querySelector("#title_scene");
@@ -90,7 +111,7 @@ function init() {
     catch (e) {
         alert('Web Audio API is not supported in this browser');
     }
-    buffer_loader = new BufferLoader(audio_context, [
+    var buffer_loader: BufferLoader = new BufferLoader(audio_context, [
         '/resources/snd/type.mp3',
         '/resources/snd/miss.mp3',
         '/resources/snd/correct.mp3'
@@ -104,23 +125,23 @@ function init() {
     //     headers: PostHeader,
     //     body: "wan"
     // }
-    document.querySelector("#play_button").addEventListener("click", () => setState("playing"));
-    document.querySelector("#back_button").addEventListener("click", () => setState("loaded"));
-    document.querySelector("#mute_button").addEventListener("click", () =>{
+    document.querySelector("#play_button")?.addEventListener("click", () => setState(GameState.playing));
+    document.querySelector("#back_button")?.addEventListener("click", () => setState(GameState.loaded));
+    document.querySelector("#mute_button")?.addEventListener("click", () =>{
         sound_volume=0;
-        document.querySelector('#mute_button').classList.add('volume_active');
-        document.querySelector('#unmute_button').classList.remove('volume_active');
+        document.querySelector('#mute_button')?.classList.add('volume_active');
+        document.querySelector('#unmute_button')?.classList.remove('volume_active');
     });
-    document.querySelector("#unmute_button").addEventListener("click", () => {
+    document.querySelector("#unmute_button")?.addEventListener("click", () => {
         sound_volume=1;
-        document.querySelector('#unmute_button').classList.add('volume_active');
-        document.querySelector('#mute_button').classList.remove('volume_active');
+        document.querySelector('#unmute_button')?.classList.add('volume_active');
+        document.querySelector('#mute_button')?.classList.remove('volume_active');
     });
-    document.querySelector('#credit').innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi"; 
-    setState("loaded");
+    document.querySelector('#credit')!.innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi"; 
+    setState(GameState.loaded);
 }
 
-async function fetchWords(_question_num) {
+async function fetchWords(_question_num: number) {
     if(DEBUG_MODE){
         Wordlist = mockWordlist;
         target_string = Wordlist[word_index]["displaykana"];
@@ -137,7 +158,7 @@ async function fetchWords(_question_num) {
     await fetch(WordListRequest, GetInit).then(response => response.json()).then(data => {
         var allWordlist = data;
         var length = allWordlist.length;
-        var indexList = [];
+        var indexList: number[] = [];
         Wordlist = [];
         if (length < question_num) return;
         while (indexList.length < question_num) {
@@ -155,25 +176,25 @@ async function fetchWords(_question_num) {
     });
 }
 
-function keydown(e) {
+function keydown(e: KeyboardEvent) {
     if (e.key == "Escape") {
-        setState("loaded");
+        setState(GameState.loaded);
         return;
     }
     switch (game_state) {
-        case "loaded":
+        case GameState.loaded:
             if (e.key == "Enter") {
-                setState("playing");
+                setState(GameState.playing);
                 return;
             }
             break;
-        case "playing":
+        case GameState.playing:
             //大文字小文字を区別しない。英語入力時に困ったら修正する。
             typed(e.key.toLowerCase());
             break;
-        case "result":
+        case GameState.result:
             if(e.key == "Enter") {
-                setState("loaded");
+                setState(GameState.loaded);
                 return;
             }
         default:
@@ -189,27 +210,27 @@ prev_kana       仮名表記のひとつ前の課題文字
 target_kana     仮名表記の課題文字
 next_kana       仮名表記の次の課題文字
 */
-function typed(input) {
-    const inputDisplay = document.querySelector("#input");
+function typed(input: string) {
+    const inputDisplay: HTMLElement | null = document.querySelector("#input");
     document.querySelectorAll(".wrong_char").forEach(w => w.remove());
 
 
     kanaUpdate();
     const automaton = setAutomaton(target_kana);
     let res = automaton(input);
-    let latest = inputDisplay.querySelector(".latest")
+    let latest = inputDisplay!.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
     if (res[0] == "skip") {
-        const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"correct_char");
-        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
-        inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
+        const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"correct_char");
+        if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
+        inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
         return;
     }
     if (res[0] == "hit") {
         correct_key_count++;
         dupulicate_wrong_gurad = false;
         prev_char = input;
-        inputDisplay.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
+        inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
         if (kana_index >= target_string.length - 1 && state == "q_exit") {
             wordEnd();
         } else if (state == "q_exit") {
@@ -221,9 +242,9 @@ function typed(input) {
         if (!dupulicate_wrong_gurad) wrong_key_count++;
         dupulicate_wrong_gurad = true;
         playSound(miss_sound_buffer, sound_volume);
-        const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
-        inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
+        const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"wrong_char");
+        if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
+        inputDisplay!.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
     if(DEBUG_MODE)console.log(res)
@@ -232,20 +253,20 @@ function typed(input) {
 }
 
 function displayTarget(index = 0) {
-    document.querySelector("#display").innerHTML = Wordlist[index]["display"];
-    document.querySelector("#displaykana").innerHTML = Wordlist[index]["displaykana"];
+    document.querySelector("#display")!.innerHTML = Wordlist[index]["display"];
+    document.querySelector("#displaykana")!.innerHTML = Wordlist[index]["displaykana"];
 }
 
 function displayDebugInfo() {
     if(!DEBUG_MODE)return;
     let d = document.querySelector("#debugInfo");
-    d.innerHTML = "";
-    d.innerHTML += "prevChar: " + prev_kana + "<br />";
-    d.innerHTML += "tryingChar: " + target_kana + "<br />";
-    d.innerHTML += "nextChar: " + next_kana + "<br />";
-    d.innerHTML += "kana_index: " + kana_index + "<br />";
-    d.innerHTML += "word_index: " + word_index + "<br />";
-    d.innerHTML += "state: " + state + "<br />";
+    d!.innerHTML = "";
+    d!.innerHTML += "prevChar: " + prev_kana + "<br />";
+    d!.innerHTML += "tryingChar: " + target_kana + "<br />";
+    d!.innerHTML += "nextChar: " + next_kana + "<br />";
+    d!.innerHTML += "kana_index: " + kana_index + "<br />";
+    d!.innerHTML += "word_index: " + word_index + "<br />";
+    d!.innerHTML += "state: " + state + "<br />";
 }
 
 function kanaUpdate() {
@@ -256,7 +277,7 @@ function kanaUpdate() {
     displayDebugInfo();
 }
 
-function kanaEnd(skipKanaCount) {
+function kanaEnd(skipKanaCount: number) {
     playSound(type_sound_buffer, sound_volume);
     kana_index += skipKanaCount;
     if (kana_index >= target_string.length) {
@@ -273,7 +294,7 @@ function wordEnd() {
     resetInput();
     word_index++;
     if (word_index == Wordlist.length) {
-        setState("result");
+        setState(GameState.result);
         return;
     }
     displayTarget(word_index);
@@ -284,10 +305,10 @@ function wordEnd() {
 function resetInput() {
     kana_index = 0;
     state = "q_init"
-    document.querySelector("#input").innerHTML = "";
+    document.querySelector("#input")!.innerHTML = "";
 }
 
-function calcScore(time) {
+function calcScore(time: number) {
     var kana_count = 0;
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
@@ -295,12 +316,12 @@ function calcScore(time) {
     let kpm = 60 * 1000 / (time / (kana_count * 2));
     let correctness = 100 * correct_key_count / (correct_key_count + wrong_key_count);
     let score = kpm * correctness / 100;
-    res = getRankAndMessage(score);
-    document.querySelector("#rank").innerHTML = res[0];
-    document.querySelector("#message").innerHTML = res[1];
-    document.querySelector("#tpk").innerHTML = (time / kana_count).toFixed(3);
-    document.querySelector("#kpm").innerHTML = kpm.toFixed(3);
-    document.querySelector("#crt").innerHTML = correctness.toFixed(3);
+    let res: RankAndMesssage = getRankAndMessage(score);
+    document.querySelector("#rank")!.innerHTML = res.Rank;
+    document.querySelector("#message")!.innerHTML = res.Message;
+    document.querySelector("#tpk")!.innerHTML = (time / kana_count).toFixed(3);
+    document.querySelector("#kpm")!.innerHTML = kpm.toFixed(3);
+    document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
 }
 
 function resetGame(){
