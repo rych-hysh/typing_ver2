@@ -1,6 +1,6 @@
 import { DEBUG_MODE } from "../ENV/develop";
 import { mockWordlist } from "../data/mock";
-import {BufferLoader, getRankAndMessage, load_finished, playSound, setAutomaton} from "./util/util"
+import { BufferLoader, getRankAndMessage, setAutomaton } from "./util/util"
 
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
@@ -8,14 +8,21 @@ var TitleScene: HTMLElement | null;
 var PlayScene: HTMLElement | null;
 var ResultScene: HTMLElement | null;
 
-enum GameState{
+export class automaton {
+    state: string = "";
+    prev_char: string = "";
+    next_kana: string = "";
+
+}
+
+enum GameState {
     "loading",
     "loaded",
     "playing",
     "result"
 }
 
-interface WordList{
+interface WordList {
     display: string,
     displaykana: string
 }
@@ -23,6 +30,11 @@ interface WordList{
 interface RankAndMesssage {
     Rank: string,
     Message: string
+}
+interface inputs {
+    prev_char: string,
+    input: string,
+    next_kana: string
 }
 var game_state: GameState = GameState.loading;
 
@@ -48,11 +60,13 @@ var state = "q_init";
 
 var kana_index: number = 0;
 
+var buffer_loader: BufferLoader;
+
 let type_sound_buffer: any;
 let miss_sound_buffer: any;
 let correct_sound_buffer: any;
 
-var audio_context : AudioContext;
+var audio_context: AudioContext;
 var sound_volume: number = 1;
 
 const WordListRequest = new Request('data/wordlist.json');
@@ -111,12 +125,17 @@ function init() {
     catch (e) {
         alert('Web Audio API is not supported in this browser');
     }
-    var buffer_loader: BufferLoader = new BufferLoader(audio_context, [
+    buffer_loader = new BufferLoader(audio_context, [
         '/resources/snd/type.mp3',
         '/resources/snd/miss.mp3',
         '/resources/snd/correct.mp3'
-    ], load_finished)
-    buffer_loader.load();
+    ])
+
+    buffer_loader.load().then(() => {
+        type_sound_buffer = buffer_loader.type_sound_buffer;
+        correct_sound_buffer = buffer_loader.correct_sound_buffer;
+        miss_sound_buffer = buffer_loader.miss_sound_buffer;
+    });
 
     // const PostHeader = new Headers();
     // PostHeader.append('Content-Type', 'text/plain')
@@ -127,22 +146,22 @@ function init() {
     // }
     document.querySelector("#play_button")?.addEventListener("click", () => setState(GameState.playing));
     document.querySelector("#back_button")?.addEventListener("click", () => setState(GameState.loaded));
-    document.querySelector("#mute_button")?.addEventListener("click", () =>{
-        sound_volume=0;
+    document.querySelector("#mute_button")?.addEventListener("click", () => {
+        sound_volume = 0;
         document.querySelector('#mute_button')?.classList.add('volume_active');
         document.querySelector('#unmute_button')?.classList.remove('volume_active');
     });
     document.querySelector("#unmute_button")?.addEventListener("click", () => {
-        sound_volume=1;
+        sound_volume = 1;
         document.querySelector('#unmute_button')?.classList.add('volume_active');
         document.querySelector('#mute_button')?.classList.remove('volume_active');
     });
-    document.querySelector('#credit')!.innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi"; 
+    document.querySelector('#credit')!.innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi";
     setState(GameState.loaded);
 }
 
 async function fetchWords(_question_num: number) {
-    if(DEBUG_MODE){
+    if (DEBUG_MODE) {
         Wordlist = mockWordlist;
         target_string = Wordlist[word_index]["displaykana"];
         displayTarget(word_index);
@@ -193,7 +212,7 @@ function keydown(e: KeyboardEvent) {
             typed(e.key.toLowerCase());
             break;
         case GameState.result:
-            if(e.key == "Enter") {
+            if (e.key == "Enter") {
                 setState(GameState.loaded);
                 return;
             }
@@ -210,15 +229,15 @@ prev_kana       仮名表記のひとつ前の課題文字
 target_kana     仮名表記の課題文字
 next_kana       仮名表記の次の課題文字
 */
-function typed(input: string) {
+export function typed(input: string) {
     const inputDisplay: HTMLElement | null = document.querySelector("#input");
     document.querySelectorAll(".wrong_char").forEach(w => w.remove());
 
 
     kanaUpdate();
     // const automaton: (t: string, n:string) =>  = setAutomaton(target_kana, next_kana);
-    const automaton: any  = setAutomaton(target_kana, next_kana);
-    let res = automaton(input);
+    const automaton: any = setAutomaton(target_kana, next_kana);
+    let res = automaton(input, state, prev_char, next_kana);
     let latest = inputDisplay!.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
     if (res[0] == "skip") {
@@ -227,6 +246,7 @@ function typed(input: string) {
         inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
         return;
     }
+    state = res[2]
     if (res[0] == "hit") {
         correct_key_count++;
         dupulicate_wrong_gurad = false;
@@ -237,18 +257,18 @@ function typed(input: string) {
         } else if (state == "q_exit") {
             kanaEnd(res[1]);
         } else {
-            playSound(type_sound_buffer, sound_volume);
+            buffer_loader.playSound(type_sound_buffer, audio_context, sound_volume);
         }
     } else {
         if (!dupulicate_wrong_gurad) wrong_key_count++;
         dupulicate_wrong_gurad = true;
-        playSound(miss_sound_buffer, sound_volume);
+        buffer_loader.playSound(miss_sound_buffer, audio_context, sound_volume);
         const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"wrong_char");
         if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
         inputDisplay!.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 
     };
-    if(DEBUG_MODE)console.log(res)
+    if (DEBUG_MODE) console.log(res)
     kanaUpdate();
     displayDebugInfo();
 }
@@ -259,7 +279,7 @@ function displayTarget(index = 0) {
 }
 
 function displayDebugInfo() {
-    if(!DEBUG_MODE)return;
+    if (!DEBUG_MODE) return;
     let d = document.querySelector("#debugInfo");
     d!.innerHTML = "";
     d!.innerHTML += "prevChar: " + prev_kana + "<br />";
@@ -278,8 +298,8 @@ function kanaUpdate() {
     displayDebugInfo();
 }
 
-function kanaEnd(skipKanaCount: number) {
-    playSound(type_sound_buffer, sound_volume);
+export function kanaEnd(skipKanaCount: number) {
+    buffer_loader.playSound(type_sound_buffer, audio_context, sound_volume);
     kana_index += skipKanaCount;
     if (kana_index >= target_string.length) {
         wordEnd();
@@ -291,7 +311,7 @@ function kanaEnd(skipKanaCount: number) {
 }
 
 function wordEnd() {
-    playSound(correct_sound_buffer, sound_volume);
+    buffer_loader.playSound(correct_sound_buffer, audio_context,  sound_volume);
     resetInput();
     word_index++;
     if (word_index == Wordlist.length) {
@@ -325,7 +345,7 @@ function calcScore(time: number) {
     document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
 }
 
-function resetGame(){
+function resetGame() {
     play_start_time;
     play_finish_time;
     correct_key_count = 0;

@@ -2,13 +2,16 @@
   "name": "typing_game",
   "version": "2.0.1",
   "description": "Typing game",
+  "main": "script.js",
   "scripts": {
     "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production",
     "start": "webpack serve --mode=development"
   },
   "author": "Hayashi Ryoichi",
   "license": "MIT",
   "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
     "webpack": "^5.78.0",

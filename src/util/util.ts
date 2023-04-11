@@ -382,20 +382,20 @@ export function setAutomaton(target_kana: string, next_kana: string) {
 		case "、":
 			automaton = EXs.automaton_TOTEN;
 			break;
-			case "！":
-				automaton = EXs.automaton_EXCLAMATION;
-				break;
-			case "？":
-				automaton = EXs.automaton_QUESTION;
-				break;
+		case "！":
+			automaton = EXs.automaton_EXCLAMATION;
+			break;
+		case "？":
+			automaton = EXs.automaton_QUESTION;
+			break;
 		default:
 			break;
 	}
 	return automaton;
 }
 
-export function getConsonant(kana: string) {
-	if (isVowel(kana)) return null;
+export function getConsonant(kana: string) : string[] {
+	if (isVowel(kana)) return [];
 	switch (kana) {
 		case "か":
 		case "き":
@@ -483,7 +483,7 @@ export function getConsonant(kana: string) {
 		case "ぽ":
 			return ["p"]
 		default:
-			break;
+			return [];
 	}
 }
 
@@ -493,10 +493,12 @@ export class BufferLoader {
 	onload: any
 	buffer_list: any[]
 	load_count: number
-	constructor(arg_context: any, arg_urlList: any, arg_callback: any) {
+	type_sound_buffer: any
+	miss_sound_buffer: any
+	correct_sound_buffer: any
+	constructor(arg_context: any, arg_urlList: any) {
 		this.context = arg_context;
 		this.url_list = arg_urlList;
-		this.onload = arg_callback;
 		this.buffer_list = new Array();
 		this.load_count = 0;
 	}
@@ -514,49 +516,51 @@ export class BufferLoader {
 				}
 				loader.buffer_list[snd_index] = buffer;
 				this.load_count++;
-				if (this.url_list.length == this.load_count) loader.onload(loader.buffer_list);
 			})
 		})
 	}
-	load() {
+	async load() {
 		for (var i = 0; i < this.url_list.length; ++i)
-			this.loadBuffer(this.url_list[i], i);
+			await this.loadBuffer(this.url_list[i], i);
+		
+		}
+	load_finished(arg_buffer_list: any[]) {
+		this.type_sound_buffer = arg_buffer_list[0];
+		this.miss_sound_buffer = arg_buffer_list[1];
+		this.correct_sound_buffer = arg_buffer_list[2];
+	}
+	playSound(buffer: any, audio_context: AudioContext, volume: number = 1) {
+		var source = audio_context.createBufferSource(); // creates a sound source
+		var gain = audio_context.createGain();
+		gain.gain.value = volume;
+		source.buffer = buffer; // tell the source which sound to play
+		source.connect(gain);
+		gain.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
+		source.start(0); // play the source now
+		// note: on older systems, may have to use deprecated noteOn(time);
 	}
 }
-export function load_finished(arg_buffer_list: any[]) {
-	type_sound_buffer = arg_buffer_list[0];
-	miss_sound_buffer = arg_buffer_list[1];
-	correct_sound_buffer = arg_buffer_list[2];
-}
-export function playSound(buffer: any, volume = 1) {
-	var source = audio_context.createBufferSource(); // creates a sound source
-	var gain = audio_context.createGain();
-	gain.gain.value = volume;
-	source.buffer = buffer; // tell the source which sound to play
-	source.connect(gain);
-	gain.connect(audio_context.destination); // connect the source to the context's destination (the speakers)
-	source.start(0); // play the source now
-	// note: on older systems, may have to use deprecated noteOn(time);
-}
+
+
 
 // function muteSound(){
 
 // }
 
-export function getRankAndMessage(_score: number){
-	if (_score < 50){
-		return {Rank: "F", Message: "がんばろう、、、"}
-	}else if(_score < 100){
-		return {Rank: "E", Message: "まだまだだね、、、"}
-	}else if(_score < 200){
-		return {Rank: "D", Message: "いい感じ！"}
-	}else if(_score < 300){
-		return {Rank: "C", Message: "タイピングﾁｮｯﾄﾃﾞｷﾙ"}
-	}else if(_score < 400){
-		return {Rank: "B", Message: "自信をもっていいレベル"}
-	}else if(_score < 500){
-		return {Rank: "A", Message: "す、すごい、、、！！！"}
-	}else{
-		return {Rank: "S", Message: "ス、スカウターが壊れた、、、！？"}
+export function getRankAndMessage(_score: number) {
+	if (_score < 50) {
+		return { Rank: "F", Message: "がんばろう、、、" }
+	} else if (_score < 100) {
+		return { Rank: "E", Message: "まだまだだね、、、" }
+	} else if (_score < 200) {
+		return { Rank: "D", Message: "いい感じ！" }
+	} else if (_score < 300) {
+		return { Rank: "C", Message: "タイピングﾁｮｯﾄﾃﾞｷﾙ" }
+	} else if (_score < 400) {
+		return { Rank: "B", Message: "自信をもっていいレベル" }
+	} else if (_score < 500) {
+		return { Rank: "A", Message: "す、すごい、、、！！！" }
+	} else {
+		return { Rank: "S", Message: "ス、スカウターが壊れた、、、！？" }
 	}
 };
