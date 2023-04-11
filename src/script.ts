@@ -30,6 +30,7 @@ interface RankAndMesssage {
     Rank: string,
     Message: string
 }
+
 interface inputs {
     prev_char: string,
     input: string,
