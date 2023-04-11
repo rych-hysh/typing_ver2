@@ -17,5 +17,6 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           LOCAL_DIR: ./
           REMOTE_DIR: "/home/ubuntu/typing"
+          ARGS: --delete --parallel=50
     
     
