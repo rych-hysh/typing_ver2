@@ -1,4 +1,4 @@
-function automaton_LONG(input) {
+export function automaton_LONG(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "-") {
@@ -12,7 +12,7 @@ function automaton_LONG(input) {
 	}
 }
 
-function automaton_TOTEN(input){
+export function automaton_TOTEN(input: string, state: string){
 	switch (state) {
 		case "q_init":
 			if(input == ",") {
@@ -27,7 +27,7 @@ function automaton_TOTEN(input){
 }
 
 
-function automaton_QUESTION(input){
+export function automaton_QUESTION(input: string, state: string){
 	switch (state) {
 		case "q_init":
 			if(input == "?") {
@@ -41,7 +41,7 @@ function automaton_QUESTION(input){
 	}
 }
 
-function automaton_EXCLAMATION(input){
+export function automaton_EXCLAMATION(input: string, state: string){
 	switch (state) {
 		case "q_init":
 			if(input == "!") {

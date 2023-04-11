@@ -1,4 +1,4 @@
-function automaton_WA(input) {
+export function automaton_WA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "w") {
@@ -18,7 +18,7 @@ function automaton_WA(input) {
 	}
 }
 
-function automaton_WO(input) {
+export function automaton_WO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "w") {
@@ -38,7 +38,7 @@ function automaton_WO(input) {
 	}
 }
 
-function automaton_NN(input) {
+export function automaton_NN(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (isVowel(next_kana) || isNstart(next_kana)) {
@@ -64,15 +64,15 @@ function automaton_NN(input) {
 			let next = getConsonant(next_kana);
 			if (next_kana == undefined) return ["miss", 0];
 			if(next.length ==1 ){
-				if(next != input) return ["miss", 0];
+				if(next != input: string) return ["miss", 0];
 				kanaEnd(1)
-				typed(input);
+				typed(input: string, state: string);
 				return ["skip", 0];
 			}
 			getConsonant(next_kana).forEach(consonant => {
 				if (input == consonant) {
 					kanaEnd(1)
-					typed(input);
+					typed(input: string, state: string);
 					return ["skip", 0];
 				}
 			})

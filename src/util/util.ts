@@ -1,380 +1,392 @@
-export function isVowel(kana) {
+import * as Vowels from "../automatons/Vowels"
+import * as Ks from "../automatons/Ks"
+import * as Ss from "../automatons/Ss"
+import * as Ts from "../automatons/Ts"
+import * as Ns from "../automatons/Ns"
+import * as Hs from "../automatons/Hs"
+import * as Ms from "../automatons/Ms"
+import * as Ys from "../automatons/Ys"
+import * as Rs from "../automatons/Rs"
+import * as Ws from "../automatons/Ws"
+import * as EXs from "../automatons/EXs";
+
+export function isVowel(kana: string) {
 	if (kana == "あ" || kana == "い" || kana == "う" || kana == "え" || kana == "お") return true;
 	return false;
 }
-export function isNstart(kana) {
+export function isNstart(kana: string) {
 	if (kana == "な" || kana == "に" || kana == "ぬ" || kana == "ね" || kana == "の") return true;
 	return false;
 }
 
 //TODO: cha,chu,che,cho,fi,mya,myu,myo,rya,ryu,ryo,bya,byu,byo,pya,pyu,pyo,thi,dhi,dhu,wi,we,va,vi,vu,ve,vo
-export function setAutomaton(target_kana) {
+export function setAutomaton(target_kana: string, next_kana: string) {
 	var automaton;
 	switch (target_kana) {
 		case "あ":
-			automaton = automaton_A;
+			automaton = Vowels.automaton_A;
 			break;
 		case "い":
-			automaton = automaton_I;
+			automaton = Vowels.automaton_I;
 			break;
 		case "う":
-			automaton = automaton_U;
+			automaton = Vowels.automaton_U;
 			break;
 		case "え":
-			automaton = automaton_E;
+			automaton = Vowels.automaton_E;
 			break;
 		case "お":
-			automaton = automaton_O;
+			automaton = Vowels.automaton_O;
 			break;
 		case "か":
-			automaton = automaton_KA;
+			automaton = Ks.automaton_KA;
 			break;
 		case "き":
 			if (next_kana == "ゃ") {
-				automaton = automaton_KYA
+				automaton = Ks.automaton_KYA
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_KYU
+				automaton = Ks.automaton_KYU
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_KYO
+				automaton = Ks.automaton_KYO
 				break;
 			}
-			automaton = automaton_KI;
+			automaton = Ks.automaton_KI;
 			break;
 		case "く":
-			automaton = automaton_KU;
+			automaton = Ks.automaton_KU;
 			break;
 		case "け":
-			automaton = automaton_KE;
+			automaton = Ks.automaton_KE;
 			break;
 		case "こ":
-			automaton = automaton_KO;
+			automaton = Ks.automaton_KO;
 			break;
 		case "さ":
-			automaton = automaton_SA;
+			automaton = Ss.automaton_SA;
 			break;
 		case "し":
 			if (next_kana == "ゃ") {
-				automaton = automaton_SHA
+				automaton = Ss.automaton_SHA
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_SHU
+				automaton = Ss.automaton_SHU
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_SHO
+				automaton = Ss.automaton_SHO
 				break;
 			}
 			if (next_kana == "ぇ") {
-				automaton = automaton_SHE
+				automaton = Ss.automaton_SHE
 				break;
 			}
-			automaton = automaton_SI;
+			automaton = Ss.automaton_SI;
 			break;
 		case "す":
-			automaton = automaton_SU;
+			automaton = Ss.automaton_SU;
 			break;
 		case "せ":
-			automaton = automaton_SE;
+			automaton = Ss.automaton_SE;
 			break;
 		case "そ":
-			automaton = automaton_SO;
+			automaton = Ss.automaton_SO;
 			break;
 		case "た":
-			automaton = automaton_TA;
+			automaton = Ts.automaton_TA;
 			break;
 		case "ち":
 			if (next_kana == "ゃ") {
-				automaton = automaton_TYA
+				automaton = Ts.automaton_TYA
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_TYU
+				automaton = Ts.automaton_TYU
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_TYO
+				automaton = Ts.automaton_TYO
 				break;
 			}
 			if (next_kana == "ぇ") {
-				automaton = automaton_TYE
+				automaton = Ts.automaton_TYE
 				break;
 			}
-			automaton = automaton_TI;
+			automaton = Ts.automaton_TI;
 			break;
 		case "つ":
-			automaton = automaton_TU;
+			automaton = Ts.automaton_TU;
 			break;
 		case "て":
 			if (next_kana == "ぃ") {
-				automaton = automaton_THI;
+				automaton = Ts.automaton_THI;
 				break;
 			}
-			automaton = automaton_TE;
+			automaton = Ts.automaton_TE;
 			break;
 		case "と":
-			automaton = automaton_TO;
+			automaton = Ts.automaton_TO;
 			break;
 		case "な":
-			automaton = automaton_NA;
+			automaton = Ns.automaton_NA;
 			break;
 		case "に":
 			if (next_kana == "ゃ") {
-				automaton = automaton_NYA;
+				automaton = Ns.automaton_NYA;
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_NYU;
+				automaton = Ns.automaton_NYU;
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_NYO;
+				automaton = Ns.automaton_NYO;
 				break;
 			}
-			automaton = automaton_NI;
+			automaton = Ns.automaton_NI;
 			break;
 		case "ぬ":
-			automaton = automaton_NU;
+			automaton = Ns.automaton_NU;
 			break;
 		case "ね":
-			automaton = automaton_NE;
+			automaton = Ns.automaton_NE;
 			break;
 		case "の":
-			automaton = automaton_NO;
+			automaton = Ns.automaton_NO;
 			break;
 		case "は":
-			automaton = automaton_HA;
+			automaton = Hs.automaton_HA;
 			break;
 		case "ひ":
 			if (next_kana == "ゃ") {
-				automaton = automaton_HYA;
+				automaton = Hs.automaton_HYA;
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_HYU;
+				automaton = Hs.automaton_HYU;
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_HYO;
+				automaton = Hs.automaton_HYO;
 				break;
 			}
-			automaton = automaton_HI;
+			automaton = Hs.automaton_HI;
 			break;
 		case "ふ":
 			// 小さい「ぇ」
 			if (next_kana == "ぁ") {
-				automaton = automaton_FA;
+				automaton = Hs.automaton_FA;
 				break;
 			}
 			if (next_kana == "ぇ") {
-				automaton = automaton_FE;
+				automaton = Hs.automaton_FE;
 				break;
 			}
 			if (next_kana == "ぉ") {
-				automaton = automaton_FO;
+				automaton = Hs.automaton_FO;
 				break;
 			}
-			automaton = automaton_FU;
+			automaton = Hs.automaton_FU;
 			break;
 		case "へ":
-			automaton = automaton_HE;
+			automaton = Hs.automaton_HE;
 			break;
 		case "ほ":
-			automaton = automaton_HO;
+			automaton = Hs.automaton_HO;
 			break;
 		case "ま":
-			automaton = automaton_MA;
+			automaton = Ms.automaton_MA;
 			break;
 		case "み":
-			automaton = automaton_MI;
+			automaton = Ms.automaton_MI;
 			break;
 		case "む":
-			automaton = automaton_MU;
+			automaton = Ms.automaton_MU;
 			break;
 		case "め":
-			automaton = automaton_ME;
+			automaton = Ms.automaton_ME;
 			break;
 		case "も":
-			automaton = automaton_MO;
+			automaton = Ms.automaton_MO;
 			break;
 		case "や":
-			automaton = automaton_YA;
+			automaton = Ys.automaton_YA;
 			break;
 		case "ゆ":
-			automaton = automaton_YU;
+			automaton = Ys.automaton_YU;
 			break;
 		case "よ":
-			automaton = automaton_YO;
+			automaton = Ys.automaton_YO;
 			break;
 		case "ら":
-			automaton = automaton_RA;
+			automaton = Rs.automaton_RA;
 			break;
 		case "り":
-			automaton = automaton_RI;
+			automaton = Rs.automaton_RI;
 			break;
 		case "る":
-			automaton = automaton_RU;
+			automaton = Rs.automaton_RU;
 			break;
 		case "れ":
-			automaton = automaton_RE;
+			automaton = Rs.automaton_RE;
 			break;
 		case "ろ":
-			automaton = automaton_RO;
+			automaton = Rs.automaton_RO;
 			break;
 		case "わ":
-			automaton = automaton_WA;
+			automaton = Ws.automaton_WA;
 			break;
 		case "を":
-			automaton = automaton_WO;
+			automaton = Ws.automaton_WO;
 			break;
 		case "ん":
-			automaton = automaton_NN;
+			automaton = Ws.automaton_NN;
 			break;
 		case "が":
-			automaton = automaton_GA;
+			automaton = Ks.automaton_GA;
 			break;
 		case "ぎ":
 			if (next_kana == "ゃ") {
-				automaton = automaton_GYA
+				automaton = Ks.automaton_GYA
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_GYU
+				automaton = Ks.automaton_GYU
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_GYO
+				automaton = Ks.automaton_GYO
 				break;
 			}
-			automaton = automaton_GI;
+			automaton = Ks.automaton_GI;
 			break;
 		case "ぐ":
-			automaton = automaton_GU;
+			automaton = Ks.automaton_GU;
 			break;
 		case "げ":
-			automaton = automaton_GE;
+			automaton = Ks.automaton_GE;
 			break;
 		case "ご":
-			automaton = automaton_GO;
+			automaton = Ks.automaton_GO;
 			break;
 		case "ざ":
-			automaton = automaton_ZA;
+			automaton = Ss.automaton_ZA;
 			break;
 		case "じ":
 			if (next_kana == "ゃ") {
-				automaton = automaton_JA
+				automaton = Ss.automaton_JA
 				break;
 			}
 			if (next_kana == "ゅ") {
-				automaton = automaton_JU
+				automaton = Ss.automaton_JU
 				break;
 			}
 			if (next_kana == "ょ") {
-				automaton = automaton_JO
+				automaton = Ss.automaton_JO
 				break;
 			}
 			if (next_kana == "ぇ") {
-				automaton = automaton_JE
+				automaton = Ss.automaton_JE
 				break;
 			}
-			automaton = automaton_ZI;
+			automaton = Ss.automaton_ZI;
 			break;
 		case "ず":
-			automaton = automaton_ZU;
+			automaton = Ss.automaton_ZU;
 			break;
 		case "ぜ":
-			automaton = automaton_ZE;
+			automaton = Ss.automaton_ZE;
 			break;
 		case "ぞ":
-			automaton = automaton_ZO;
+			automaton = Ss.automaton_ZO;
 			break;
 		case "だ":
-			automaton = automaton_DA;
+			automaton = Ts.automaton_DA;
 			break;
 		case "ぢ":
-			automaton = automaton_DI;
+			automaton = Ts.automaton_DI;
 			break;
 		case "づ":
-			automaton = automaton_DU;
+			automaton = Ts.automaton_DU;
 			break;
 		case "で":
-			automaton = automaton_DE;
+			automaton = Ts.automaton_DE;
 			break;
 		case "ど":
-			automaton = automaton_DO;
+			automaton = Ts.automaton_DO;
 			break;
 		case "ば":
-			automaton = automaton_BA;
+			automaton = Hs.automaton_BA;
 			break;
 		case "び":
-			automaton = automaton_BI;
+			automaton = Hs.automaton_BI;
 			break;
 		case "ぶ":
-			automaton = automaton_BU;
+			automaton = Hs.automaton_BU;
 			break;
 		case "べ":
-			automaton = automaton_BE;
+			automaton = Hs.automaton_BE;
 			break;
 		case "ぼ":
-			automaton = automaton_BO;
+			automaton = Hs.automaton_BO;
 			break;
 		case "ぱ":
-			automaton = automaton_PA;
+			automaton = Hs.automaton_PA;
 			break;
 		case "ぴ":
-			automaton = automaton_PI;
+			automaton = Hs.automaton_PI;
 			break;
 		case "ぷ":
-			automaton = automaton_PU;
+			automaton = Hs.automaton_PU;
 			break;
 		case "ぺ":
-			automaton = automaton_PE;
+			automaton = Hs.automaton_PE;
 			break;
 		case "ぽ":
-			automaton = automaton_PO;
+			automaton = Hs.automaton_PO;
 			break;
 		case "ぁ":
-			automaton = automaton_LA;
+			automaton = Vowels.automaton_LA;
 			break;
 		case "ぃ":
-			automaton = automaton_LI;
+			automaton = Vowels.automaton_LI;
 			break;
 		case "ぅ":
-			automaton = automaton_LU;
+			automaton = Vowels.automaton_LU;
 			break;
 		case "ぇ":
-			automaton = automaton_LE;
+			automaton = Vowels.automaton_LE;
 			break;
 		case "ぉ":
-			automaton = automaton_LO;
+			automaton = Vowels.automaton_LO;
 			break;
 		case "っ":
-			automaton = automaton_LTU;
+			automaton = Ts.automaton_LTU;
 			break;
 		case "ゃ":
-			automaton = automaton_LYA;
+			automaton = Ys.automaton_LYA;
 			break;
 		case "ゅ":
-			automaton = automaton_LYU;
+			automaton = Ys.automaton_LYU;
 			break;
 		case "ょ":
-			automaton = automaton_LYO;
+			automaton = Ys.automaton_LYO;
 			break;
 		case "ー":
-			automaton = automaton_LONG;
+			automaton = EXs.automaton_LONG;
 			break;
 		case "、":
-			automaton = automaton_TOTEN;
+			automaton = EXs.automaton_TOTEN;
 			break;
 			case "！":
-				automaton = automaton_EXCLAMATION;
+				automaton = EXs.automaton_EXCLAMATION;
 				break;
 			case "？":
-				automaton = automaton_QUESTION;
+				automaton = EXs.automaton_QUESTION;
 				break;
 		default:
 			break;
@@ -382,7 +394,7 @@ export function setAutomaton(target_kana) {
 	return automaton;
 }
 
-export function getConsonant(kana) {
+export function getConsonant(kana: string) {
 	if (isVowel(kana)) return null;
 	switch (kana) {
 		case "か":
@@ -476,7 +488,12 @@ export function getConsonant(kana) {
 }
 
 export class BufferLoader {
-	constructor(arg_context, arg_urlList, arg_callback) {
+	context: any
+	url_list: any
+	onload: any
+	buffer_list: any[]
+	load_count: number
+	constructor(arg_context: any, arg_urlList: any, arg_callback: any) {
 		this.context = arg_context;
 		this.url_list = arg_urlList;
 		this.onload = arg_callback;
@@ -485,12 +502,12 @@ export class BufferLoader {
 	}
 
 
-	loadBuffer(snd_url, snd_index) {
+	loadBuffer(snd_url: string, snd_index: number) {
 		let loader = this;
 		fetch(snd_url, {
 			method: 'GET'
 		}).then(response => response.arrayBuffer()).then(arrbuffer => {
-			loader.context.decodeAudioData(arrbuffer, buffer => {
+			loader.context.decodeAudioData(arrbuffer, (buffer: any) => {
 				if (!buffer) {
 					alert('error decoding file data: ' + snd_url);
 					return;
@@ -506,12 +523,12 @@ export class BufferLoader {
 			this.loadBuffer(this.url_list[i], i);
 	}
 }
-export function load_finished(arg_buffer_list) {
+export function load_finished(arg_buffer_list: any[]) {
 	type_sound_buffer = arg_buffer_list[0];
 	miss_sound_buffer = arg_buffer_list[1];
 	correct_sound_buffer = arg_buffer_list[2];
 }
-export function playSound(buffer, volume = 1) {
+export function playSound(buffer: any, volume = 1) {
 	var source = audio_context.createBufferSource(); // creates a sound source
 	var gain = audio_context.createGain();
 	gain.gain.value = volume;

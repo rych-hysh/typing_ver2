@@ -1,4 +1,4 @@
-function automaton_A(input) {
+export function automaton_A(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "a") {
@@ -12,7 +12,7 @@ function automaton_A(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_I(input) {
+export function automaton_I(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "i") {
@@ -25,7 +25,7 @@ function automaton_I(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_U(input) {
+export function automaton_U(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "u") {
@@ -38,7 +38,7 @@ function automaton_U(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_E(input) {
+export function automaton_E(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "e") {
@@ -51,7 +51,7 @@ function automaton_E(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_O(input) {
+export function automaton_O(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "o") {
@@ -65,7 +65,7 @@ function automaton_O(input) {
 	}
 }
 
-function automaton_LA(input) {
+export function automaton_LA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "x" || input == "l") {
@@ -84,7 +84,7 @@ function automaton_LA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_LI(input) {
+export function automaton_LI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "x" || input == "l") {
@@ -103,7 +103,7 @@ function automaton_LI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_LU(input) {
+export function automaton_LU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "x" || input == "l") {
@@ -122,7 +122,7 @@ function automaton_LU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_LE(input) {
+export function automaton_LE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "x" || input == "l") {
@@ -141,7 +141,7 @@ function automaton_LE(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_LO(input) {
+export function automaton_LO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "x" || input == "l") {

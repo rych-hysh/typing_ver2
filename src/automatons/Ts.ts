@@ -1,7 +1,7 @@
-function automaton_HA(input) {
+export function automaton_TA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
+			if (input == "t") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -17,10 +17,10 @@ function automaton_HA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_HI(input) {
+export function automaton_TI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
+			if (input == "t") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -36,10 +36,10 @@ function automaton_HI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_HU(input) {
+export function automaton_TU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
+			if (input == "t") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -55,10 +55,10 @@ function automaton_HU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_HE(input) {
+export function automaton_TE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
+			if (input == "t") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -75,10 +75,10 @@ function automaton_HE(input) {
 	}
 }
 
-function automaton_HO(input) {
+export function automaton_TO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
+			if (input == "t") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -95,30 +95,10 @@ function automaton_HO(input) {
 	}
 }
 
-function automaton_FU(input) {
+export function automaton_DA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "f" || input == "h") {
-				state = "q_1"
-				return ["hit", 0];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "u") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_BA(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "b") {
+			if (input == "d") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -134,10 +114,10 @@ function automaton_BA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_BI(input) {
+export function automaton_DI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "b") {
+			if (input == "d") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -153,10 +133,10 @@ function automaton_BI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_BU(input) {
+export function automaton_DU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "b") {
+			if (input == "d") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -172,10 +152,10 @@ function automaton_BU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_BE(input) {
+export function automaton_DE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "b") {
+			if (input == "d") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -192,10 +172,10 @@ function automaton_BE(input) {
 	}
 }
 
-function automaton_BO(input) {
+export function automaton_DO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "b") {
+			if (input == "d") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -212,191 +192,98 @@ function automaton_BO(input) {
 	}
 }
 
-function automaton_PA(input) {
+export function automaton_LTU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "p") {
+			if (input == "l" || input == "x") {
 				state = "q_1"
-				return ["hit", 0];
+				return ["hit", 0]
 			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "a") {
-				state = "q_exit";
-				return ["hit", 1];
+			var cons = getConsonant(next_kana);
+			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
+				state = "q_1'"
+				return ["hit", 0]
+			}
+			if (cons.length > 1) {
+				for(i in cons){
+					if (input == cons[i]) {
+						state = "q_1'"
+						return ["hit", 0]
+					}
+				}
 			}
 			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-function automaton_PI(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "p") {
-				state = "q_1"
-				return ["hit", 0];
-			}
-			return ["miss", 0];
 		case "q_1":
-			if (input == "i") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-function automaton_PU(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "p") {
-				state = "q_1"
-				return ["hit", 0];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "u") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-function automaton_PE(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "p") {
-				state = "q_1"
-				return ["hit", 0];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "e") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_PO(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "p") {
-				state = "q_1"
-				return ["hit", 0];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "o") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_FA(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "f") {
-				state = "q_1"
-				return ["hit", 1];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "u") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			if (input == "a") {
-				state = "q_exit";
-				return ["hit", 2];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_FE(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "f") {
-				state = "q_1"
-				return ["hit", 1];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "u") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			if (input == "e") {
-				state = "q_exit";
-				return ["hit", 2];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_FO(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "f") {
-				state = "q_1"
-				return ["hit", 1];
-			}
-			return ["miss", 0];
-		case "q_1":
-			if (input == "u") {
-				state = "q_exit";
-				return ["hit", 1];
-			}
-			if (input == "o") {
-				state = "q_exit";
-				return ["hit", 2];
-			}
-			return ["miss", 0]
-		default:
-			console.log("unexpected error");
-			return ["miss", 0];
-	}
-}
-
-function automaton_HYA(input) {
-	switch (state) {
-		case "q_init":
-			if (input == "h") {
-				state = "q_1";
+			if (input == "t") {
+				state = "q_2";
 				return ["hit", 0]
 			}
 			return ["miss", 0]
-		case "q_1":
+		case "q_2":
+			if (input == "s") {
+				state = "q_3";
+				return ["hit", 0]
+			}
+			if (input == "u") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_3":
+			if (input == "u") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_1'":
+			var cons = getConsonant(next_kana);
+			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
+				kanaEnd(1)
+				typed(input: string, state: string);
+				return ["skip", 1];
+			}
+			if (cons.length > 1) {
+				for(i in cons){
+					if (input == cons[i]) {
+						kanaEnd(1)
+						typed(input: string, state: string);
+						return ["skip", 1];
+					}
+				}
+			}
+			return ["miss", 0]
+		default:
+			console.log("unexpected error");
+			return ["miss", 0];
+	}
+}
+
+export function automaton_TYA(input: string, state: string) {
+	switch (state) {
+		case "q_init":
+			if (input == "t") {
+				state = "q_1a";
+				return ["hit", 0]
+			}
+			if (input == "c") {
+				state = "q_1b";
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_1a":
 			if (input == "y") {
 				state = "q_2"
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state = "q_exit";
-				return ["hit", 1];
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_1b":
+			if (input == "h") {
+				state = "q_2"
+				return ["hit", 0]
 			}
 			return ["miss", 0]
 		case "q_2":
@@ -404,29 +291,42 @@ function automaton_HYA(input) {
 				state = "q_exit";
 				return ["hit", 2];
 			}
+			if(input == "i" && prev_char == "h") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
-
-function automaton_HYU(input) {
+export function automaton_TYU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
-				state = "q_1";
+			if (input == "t") {
+				state = "q_1a";
+				return ["hit", 0]
+			}
+			if (input == "c") {
+				state = "q_1b";
 				return ["hit", 0]
 			}
 			return ["miss", 0]
-		case "q_1":
+		case "q_1a":
 			if (input == "y") {
 				state = "q_2"
 				return ["hit", 0]
 			}
 			if (input == "i") {
-				state = "q_exit";
-				return ["hit", 1];
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_1b":
+			if (input == "h") {
+				state = "q_2"
+				return ["hit", 0]
 			}
 			return ["miss", 0]
 		case "q_2":
@@ -434,29 +334,85 @@ function automaton_HYU(input) {
 				state = "q_exit";
 				return ["hit", 2];
 			}
+			if(input == "i" && prev_char == "h") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
 			return ["miss", 0];
 	}
 }
-
-function automaton_HYO(input) {
+export function automaton_TYE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "h") {
-				state = "q_1";
+			if (input == "t") {
+				state = "q_1a";
+				return ["hit", 0]
+			}
+			if (input == "c") {
+				state = "q_1b";
 				return ["hit", 0]
 			}
 			return ["miss", 0]
-		case "q_1":
+		case "q_1a":
 			if (input == "y") {
 				state = "q_2"
 				return ["hit", 0]
 			}
 			if (input == "i") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_1b":
+			if (input == "h") {
+				state = "q_2"
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_2":
+			if (input == "e") {
 				state = "q_exit";
-				return ["hit", 1];
+				return ["hit", 2];
+			}
+			if(input == "i" && prev_char == "h") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		default:
+			console.log("unexpected error");
+			return ["miss", 0];
+	}
+}
+export function automaton_TYO(input: string, state: string) {
+	switch (state) {
+		case "q_init":
+			if (input == "t") {
+				state = "q_1a";
+				return ["hit", 0]
+			}
+			if (input == "c") {
+				state = "q_1b";
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_1a":
+			if (input == "y") {
+				state = "q_2"
+				return ["hit", 0]
+			}
+			if (input == "i") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
+			return ["miss", 0]
+		case "q_1b":
+			if (input == "h") {
+				state = "q_2"
+				return ["hit", 0]
 			}
 			return ["miss", 0]
 		case "q_2":
@@ -464,9 +420,43 @@ function automaton_HYO(input) {
 				state = "q_exit";
 				return ["hit", 2];
 			}
+			if(input == "i" && prev_char == "h") {
+				state = "q_exit"
+				return ["hit", 1]
+			}
 			return ["miss", 0]
 		default:
 			console.log("unexpected error");
 			return ["miss", 0];
+	}
+}
+
+export function automaton_THI(input: string, state: string){
+	switch (state) {
+		case "q_init":
+			if(input == "t"){
+				state = "q_1"
+				return ["hit", 0]
+			}
+			return ["miss", 0]
+		case "q_1":
+			if(input == "h"){
+				state = "q_2"
+				return ["hit", 0]	
+			}
+			if(input == "e") {
+				state = "q_exit"
+				return ["hit", 1]	
+			}
+			return ["miss", 0]
+		case "q_2":
+			if(input == "i"){
+				state = "q_exit";
+				return ["hit", 2]
+			}
+			return ["miss", 0]
+			default:
+				console.log("unexpected error");
+				return ["miss", 0];
 	}
 }

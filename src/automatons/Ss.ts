@@ -1,4 +1,4 @@
-function automaton_SA(input) {
+export function automaton_SA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -18,7 +18,7 @@ function automaton_SA(input) {
 	}
 }
 //TODO
-function automaton_SI(input) {
+export function automaton_SI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -47,7 +47,7 @@ function automaton_SI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_SU(input) {
+export function automaton_SU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -66,7 +66,7 @@ function automaton_SU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_SE(input) {
+export function automaton_SE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -86,7 +86,7 @@ function automaton_SE(input) {
 	}
 }
 
-function automaton_SO(input) {
+export function automaton_SO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -106,7 +106,7 @@ function automaton_SO(input) {
 	}
 }
 
-function automaton_ZA(input) {
+export function automaton_ZA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "z") {
@@ -127,7 +127,7 @@ function automaton_ZA(input) {
 }
 
 
-function automaton_ZI(input) {
+export function automaton_ZI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "z" || input == "j") {
@@ -146,7 +146,7 @@ function automaton_ZI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_ZU(input) {
+export function automaton_ZU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "z") {
@@ -165,7 +165,7 @@ function automaton_ZU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_ZE(input) {
+export function automaton_ZE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "z") {
@@ -185,7 +185,7 @@ function automaton_ZE(input) {
 	}
 }
 
-function automaton_ZO(input) {
+export function automaton_ZO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "z") {
@@ -205,7 +205,7 @@ function automaton_ZO(input) {
 	}
 }
 
-function automaton_SHA(input) {
+export function automaton_SHA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -248,7 +248,7 @@ function automaton_SHA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_SHU(input) {
+export function automaton_SHU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -291,7 +291,7 @@ function automaton_SHU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_SHE(input) {
+export function automaton_SHE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -324,7 +324,7 @@ function automaton_SHE(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_SHO(input) {
+export function automaton_SHO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "s") {
@@ -368,7 +368,7 @@ function automaton_SHO(input) {
 	}
 }
 
-function automaton_JA(input) {
+export function automaton_JA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "j" || input == "z") {
@@ -402,7 +402,7 @@ function automaton_JA(input) {
 	}
 }
 
-function automaton_JU(input) {
+export function automaton_JU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "j" || input == "z") {
@@ -436,7 +436,7 @@ function automaton_JU(input) {
 	}
 }
 
-function automaton_JE(input){
+export function automaton_JE(input: string, state: string){
 	switch (state) {
 		case "q_init":
 			if (input == "j" || input == "z") {
@@ -470,7 +470,7 @@ function automaton_JE(input){
 	}
 }
 
-function automaton_JO(input) {
+export function automaton_JO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "j" || input == "z") {

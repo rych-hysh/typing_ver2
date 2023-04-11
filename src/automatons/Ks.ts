@@ -1,5 +1,5 @@
 
-function automaton_KA(input) {
+export function automaton_KA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -18,7 +18,7 @@ function automaton_KA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KI(input) {
+export function automaton_KI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -37,7 +37,7 @@ function automaton_KI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KU(input) {
+export function automaton_KU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -56,7 +56,7 @@ function automaton_KU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KE(input) {
+export function automaton_KE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -75,7 +75,7 @@ function automaton_KE(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KO(input) {
+export function automaton_KO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -95,7 +95,7 @@ function automaton_KO(input) {
 	}
 }
 
-function automaton_GA(input) {
+export function automaton_GA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -114,7 +114,7 @@ function automaton_GA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_GI(input) {
+export function automaton_GI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -133,7 +133,7 @@ function automaton_GI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_GU(input) {
+export function automaton_GU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -152,7 +152,7 @@ function automaton_GU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_GE(input) {
+export function automaton_GE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -172,7 +172,7 @@ function automaton_GE(input) {
 	}
 }
 
-function automaton_GO(input) {
+export function automaton_GO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -192,7 +192,7 @@ function automaton_GO(input) {
 	}
 }
 
-function automaton_KYA(input) {
+export function automaton_KYA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -221,7 +221,7 @@ function automaton_KYA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KYU(input) {
+export function automaton_KYU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -251,7 +251,7 @@ function automaton_KYU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_KYO(input) {
+export function automaton_KYO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "k") {
@@ -281,7 +281,7 @@ function automaton_KYO(input) {
 	}
 }
 
-function automaton_GYA(input) {
+export function automaton_GYA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -310,7 +310,7 @@ function automaton_GYA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_GYU(input) {
+export function automaton_GYU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {
@@ -340,7 +340,7 @@ function automaton_GYU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_GYO(input) {
+export function automaton_GYO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "g") {

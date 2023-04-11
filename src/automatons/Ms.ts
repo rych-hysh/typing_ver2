@@ -1,7 +1,7 @@
-function automaton_RA(input) {
+export function automaton_MA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "r") {
+			if (input == "m") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -17,10 +17,10 @@ function automaton_RA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_RI(input) {
+export function automaton_MI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "r") {
+			if (input == "m") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -36,10 +36,10 @@ function automaton_RI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_RU(input) {
+export function automaton_MU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "r") {
+			if (input == "m") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -55,10 +55,10 @@ function automaton_RU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_RE(input) {
+export function automaton_ME(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "r") {
+			if (input == "m") {
 				state = "q_1"
 				return ["hit", 0];
 			}
@@ -75,10 +75,10 @@ function automaton_RE(input) {
 	}
 }
 
-function automaton_RO(input) {
+export function automaton_MO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
-			if (input == "r") {
+			if (input == "m") {
 				state = "q_1"
 				return ["hit", 0];
 			}

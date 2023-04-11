@@ -38,11 +38,11 @@ var Wordlist: WordList[] = [];
 var word_index: number = 0;
 var question_num: number = 10;
 
-var prev_kana: String;
-var target_kana: String;
-var next_kana: String;
+var prev_kana: string;
+var target_kana: string;
+var next_kana: string;
 
-var prev_char: String;
+var prev_char: string;
 
 var state = "q_init";
 
@@ -216,7 +216,8 @@ function typed(input: string) {
 
 
     kanaUpdate();
-    const automaton = setAutomaton(target_kana);
+    // const automaton: (t: string, n:string) =>  = setAutomaton(target_kana, next_kana);
+    const automaton: any  = setAutomaton(target_kana, next_kana);
     let res = automaton(input);
     let latest = inputDisplay!.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")

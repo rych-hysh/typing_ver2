@@ -1,4 +1,4 @@
-function automaton_NA(input) {
+export function automaton_NA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -17,7 +17,7 @@ function automaton_NA(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_NI(input) {
+export function automaton_NI(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -36,7 +36,7 @@ function automaton_NI(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_NU(input) {
+export function automaton_NU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -55,7 +55,7 @@ function automaton_NU(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_NE(input) {
+export function automaton_NE(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -74,7 +74,7 @@ function automaton_NE(input) {
 			return ["miss", 0];
 	}
 }
-function automaton_NO(input) {
+export function automaton_NO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -94,7 +94,7 @@ function automaton_NO(input) {
 	}
 }
 
-function automaton_NYA(input) {
+export function automaton_NYA(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -124,7 +124,7 @@ function automaton_NYA(input) {
 	}
 }
 
-function automaton_NYU(input) {
+export function automaton_NYU(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
@@ -154,7 +154,7 @@ function automaton_NYU(input) {
 	}
 }
 
-function automaton_NYO(input) {
+export function automaton_NYO(input: string, state: string) {
 	switch (state) {
 		case "q_init":
 			if (input == "n") {
