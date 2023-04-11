@@ -16,6 +16,6 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           LOCAL_DIR: ./
-          REMOTE_DIR: "/var/www/html"
+          REMOTE_DIR: "/home/ubuntu/typing"
     
     
