@@ -18,6 +18,9 @@ var Wordlist = [];
 var word_index = 0;
 var question_num = 10;
 
+var miss_typed_list; //誤って入力した文字
+var miss_list //TODO: 本来入力を求められた文字
+
 var prev_kana;
 var target_kana;
 var next_kana;
@@ -232,7 +235,9 @@ function keyHit(input, skipKanaCount){
 function keyMiss(input){
     if (!dupulicate_wrong_gurad) wrong_key_count++;
     dupulicate_wrong_gurad = true;
+
     playSound(miss_sound_buffer, sound_volume);
+    
     const lastIndex = inputDisplay.innerHTML.lastIndexOf("<span class=\"wrong_char");
     if (lastIndex != -1) inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, lastIndex);
     inputDisplay.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
