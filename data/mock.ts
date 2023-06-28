@@ -1,4 +1,4 @@
-const mockWordlist = [
+export const mockWordlist = [
   {
     "display": "地球",
     "displaykana": "こうぎょうこうこう"
