@@ -250,25 +250,9 @@ export function typed(input: string) {
     }
     state = res[2]
     if (res[0] == "hit") {
-        correct_key_count++;
-        dupulicate_wrong_gurad = false;
-        prev_char = input;
-        inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-        if (kana_index >= target_string.length - 1 && state == "q_exit") {
-            wordEnd();
-        } else if (state == "q_exit") {
-            kanaEnd(res[1]);
-        } else {
-            buffer_loader.playSound(type_sound_buffer, audio_context, sound_volume);
-        }
+        keyHit(input, res[1])
     } else {
-        if (!dupulicate_wrong_gurad) wrong_key_count++;
-        dupulicate_wrong_gurad = true;
-        buffer_loader.playSound(miss_sound_buffer, audio_context, sound_volume);
-        const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
-        inputDisplay!.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
-
+        keyMiss(input)
     };
     if (DEBUG_MODE) console.log(res)
     kanaUpdate();
