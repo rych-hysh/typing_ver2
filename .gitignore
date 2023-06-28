@@ -1,10 +1,9 @@
 /data/
-!/data/template.json
-!/data/mock.js
 /ENV/
-!/ENV/template.js
 /dist/
-
 /node_modules/
 bundled.js
 dist/bundled.js
+!/ENV/template.js
+!/data/template.json
+!/data/mock.js
