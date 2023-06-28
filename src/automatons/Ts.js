@@ -236,7 +236,6 @@ function automaton_LTU(input) {
 			}
 			return ["miss", 0]
 		case "q_1'":
-			console.log(getConsonant(next_kana) + "dayo")
 			var cons = getConsonant(next_kana);
 			if (cons.length == 1 && input == getConsonant(next_kana)[0]) {
 				kanaEnd(1)
