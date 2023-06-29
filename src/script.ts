@@ -2,6 +2,8 @@ import { DEBUG_MODE } from "../ENV/develop";
 import { mockWordlist } from "../data/mock";
 import { BufferLoader, getRankAndMessage, setAutomaton } from "./util/util"
 
+import { Chart } from 'chart.js/auto'
+
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
 var TitleScene: HTMLElement | null;
@@ -10,11 +12,7 @@ var ResultScene: HTMLElement | null;
 
 var inputDisplay: HTMLElement | null;
 
-export class automaton {
-    state: string = "";
-    prev_char: string = "";
-    next_kana: string = "";
-}
+var resultChart: Chart;
 
 enum GameState {
     "loading",
@@ -38,20 +36,29 @@ interface inputs {
     input: string,
     next_kana: string
 }
+
+interface inputLog {
+    input: string,
+    expected: string | undefined, //TODO: 未実装。実装の可否も含めて検討する
+    timeTillInput: number,
+    hit: boolean
+}
+var inputHistory: inputLog[] = [];
 var game_state: GameState = GameState.loading;
 
 var play_start_time: number;
 var play_finish_time: number;
+var prev_input_time: number;
 var correct_key_count: number = 0;
 var wrong_key_count: number = 0;
-var dupulicate_wrong_gurad: boolean = false;
+var dupulicate_wrong_guard: boolean = false;
 
-var target_string: string;
+
 
 var Wordlist: WordList[] = [];
 var word_index: number = 0;
 var question_num: number = 10;
-
+var target_string: string;
 var prev_kana: string;
 var target_kana: string;
 var next_kana: string;
@@ -97,7 +104,7 @@ function setState(new_state: GameState) {
 }
 
 function startGame() {
-    resetGame();
+    initGame();
     fetchWords(question_num).then(() => {
         kanaUpdate();
         displayTarget();
@@ -254,6 +261,9 @@ export function typed(input: string) {
     } else {
         keyMiss(input)
     };
+    inputHistory.push({input: input, expected: latest?.innerHTML, timeTillInput: Date.now() - prev_input_time, hit: res[0] == "hit"})
+    prev_input_time = Date.now();
+
     if (DEBUG_MODE) console.log(res)
     kanaUpdate();
     displayDebugInfo();
@@ -261,7 +271,7 @@ export function typed(input: string) {
 
 function keyHit(input: string, skipKanaCount: number){
     correct_key_count++;
-    dupulicate_wrong_gurad = false;
+    dupulicate_wrong_guard = false;
     prev_char = input;
     inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
     if (kana_index >= target_string.length - 1 && state == "q_exit") {
@@ -274,8 +284,8 @@ function keyHit(input: string, skipKanaCount: number){
 }
 
 function keyMiss(input: string){
-    if (!dupulicate_wrong_gurad) wrong_key_count++;
-    dupulicate_wrong_gurad = true;
+    if (!dupulicate_wrong_guard) wrong_key_count++;
+    dupulicate_wrong_guard = true;
 
     buffer_loader.playSound(miss_sound_buffer, audio_context, sound_volume);
     
@@ -332,6 +342,7 @@ function wordEnd() {
     displayTarget(word_index);
     kanaUpdate();
     displayDebugInfo();
+    prev_input_time = Date.now();
 }
 
 function resetInput() {
@@ -341,6 +352,7 @@ function resetInput() {
 }
 
 function calcScore(time: number) {
+    if(DEBUG_MODE) console.log(inputHistory)
     var kana_count = 0;
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
@@ -354,14 +366,19 @@ function calcScore(time: number) {
     document.querySelector("#tpk")!.innerHTML = (time / kana_count).toFixed(3);
     document.querySelector("#kpm")!.innerHTML = kpm.toFixed(3);
     document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
+    let Canv : HTMLCanvasElement = document.querySelector<HTMLCanvasElement>("#score_chart")!;
+    resultChart = new Chart(Canv, {type: 'line', data: { labels: inputHistory.map(row => row.input), datasets: [{
+        label: 'data',
+        data: inputHistory.map(row => row.timeTillInput)
+    }]}})
 }
 
-function resetGame() {
+function initGame() {
     play_start_time;
     play_finish_time;
     correct_key_count = 0;
     wrong_key_count = 0;
-    dupulicate_wrong_gurad = false;
+    dupulicate_wrong_guard = false;
 
     target_string = "";
 
@@ -377,4 +394,7 @@ function resetGame() {
     state = "q_init";
 
     kana_index = 0;
+    inputHistory = [];
+    prev_input_time = Date.now();
+    if(resultChart != undefined)resultChart.destroy();
 }
