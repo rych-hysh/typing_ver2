@@ -1,4 +1,4 @@
-import { automaton, kanaEnd, typed } from "../script";
+import { kanaEnd, typed } from "../script";
 import { getConsonant, isNstart, isVowel } from "../util/util";
 
 export function automaton_WA(input: string, state: string, prev_char: string, next_kana: string) {
@@ -72,13 +72,14 @@ export function automaton_NN(input: string, state: string, prev_char: string, ne
 				typed(input);
 				return ["skip", 0, state];
 			}
-			getConsonant(next_kana)!.forEach(consonant => {
-				if (input == consonant) {
+			var i = 0;
+			while(i < next.length){
+				if (input == next[i]) {
 					kanaEnd(1)
 					typed(input);
 					return ["skip", 0, state];
 				}
-			})
+			}
 			return ["miss", 0, state]
 		case "q_1a":
 			if (input == "n") {
