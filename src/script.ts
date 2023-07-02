@@ -386,7 +386,6 @@ function resetInput() {
 }
 
 function calcScore(time: number) {
-    console.log(History)
     var kana_count = 0;
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
@@ -398,9 +397,8 @@ function calcScore(time: number) {
     document.querySelector("#rank")!.innerHTML = res.Rank;
     document.querySelector("#message")!.innerHTML = res.Message;
     document.querySelector("#tpk")!.innerHTML = (time / kana_count).toFixed(3);
-    console.log(kana_count)
-    console.log(time)
     document.querySelector("#kpm")!.innerHTML = kpm.toFixed(3);
+    document.querySelector("#kps")!.innerHTML = (kpm/60).toFixed(3);
     document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
     showDetailedResult();
 }
@@ -459,5 +457,6 @@ function initGame() {
     kana_index = 0;
     inputHistory = [];
     History = [];
+    result_word_index = 0;
     prev_input_time = performance.now();
 }
