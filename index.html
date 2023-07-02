@@ -3,21 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <script src="data/mock.js" type="text/javascript"></script>
-    <script src="ENV/develop.js" type="text/javascript"></script>
-    <script src="src/util/util.js" type="text/javascript"></script>
-    <script src="src/automatons/Vowels.js" type="text/javascript"></script>
-    <script src="src/automatons/Ks.js" type="text/javascript"></script>
-    <script src="src/automatons/Ss.js" type="text/javascript"></script>
-    <script src="src/automatons/Ts.js" type="text/javascript"></script>
-    <script src="src/automatons/Ns.js" type="text/javascript"></script>
-    <script src="src/automatons/Hs.js" type="text/javascript"></script>
-    <script src="src/automatons/Ms.js" type="text/javascript"></script>
-    <script src="src/automatons/Ys.js" type="text/javascript"></script>
-    <script src="src/automatons/Rs.js" type="text/javascript"></script>
-    <script src="src/automatons/Ws.js" type="text/javascript"></script>
-    <script src="src/automatons/EXs.js" type="text/javascript"></script>
-    <script src="src/script.js" type="text/javascript"></script>
+    <script src="dist/bundled.js" type="text/javascript"></script>
     <link href="style.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -66,10 +52,36 @@
                         class="unit_label">( ms )</span><br />
                     <span class="res_label">Key per minutes</span>:<span id="kpm" class="res_box"></span><span
                         class="unit_label">( kpm )</span><br />
+                    <span class="res_label">Key per seconds</span>:<span id="kps" class="res_box"></span><span
+                        class="unit_label">( kps )</span><br />
                     <span class="res_label">Correctness</span>:<span id="crt" class="res_box"></span><span
                         class="unit_label">%</span><br />
                 </div>
             </div>
+            <div id="detail_score" class="hide">
+                <div id="question_word_container">
+                    <span id="question_word"></span>
+                </div>
+                <div id="chart_outer">
+                <canvas id="score_chart"></canvas>
+
+                </div>
+                <div id="chart_controller_container">
+                    <div id="chart_controller_inner">
+                        <button id="to_prev_word_chart" class="chart_controller">
+                            <span class="material-symbols-outlined">
+                                arrow_back_ios
+                                </span>
+                        </button>
+                        <button id="to_next_word_chart" class="chart_controller">
+                            <span class="material-symbols-outlined">
+                                arrow_forward_ios
+                                </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button id="detail_button" class="scene_button">See details</button>
             <button id="back_button" class="scene_button">BACK</button>
         </div>
         <div id="description">
