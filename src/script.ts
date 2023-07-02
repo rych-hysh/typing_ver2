@@ -9,7 +9,7 @@ window.addEventListener("keydown", keydown);
 var TitleScene: HTMLElement | null;
 var PlayScene: HTMLElement | null;
 var ResultScene: HTMLElement | null;
-
+var ResultDisplay: HTMLElement | null;
 var inputDisplay: HTMLElement | null;
 
 var resultChart: Chart;
@@ -41,9 +41,12 @@ interface inputLog {
     input: string,
     expected: string | undefined, //TODO: 未実装。実装の可否も含めて検討する
     timeTillInput: number,
-    hit: boolean
+    kpm: number,
+    hit: boolean,
+    wordEnd: boolean
 }
 var inputHistory: inputLog[] = [];
+var History: inputLog[][] = [];
 var game_state: GameState = GameState.loading;
 
 var play_start_time: number;
@@ -78,6 +81,8 @@ let correct_sound_buffer: any;
 var audio_context: AudioContext;
 var sound_volume: number = 1;
 
+var result_word_index: number = 0;
+
 const WordListRequest = new Request('data/wordlist.json');
 
 function setState(new_state: GameState) {
@@ -104,15 +109,14 @@ function setState(new_state: GameState) {
 }
 
 function startGame() {
-    initGame();
     fetchWords(question_num).then(() => {
         kanaUpdate();
         displayTarget();
         PlayScene?.classList.remove("hide");
         TitleScene?.classList.add("hide");
         ResultScene?.classList.add("hide");
-        play_start_time = Date.now();
     })
+    initGame();
 }
 
 function showResult() {
@@ -126,6 +130,7 @@ function init() {
     TitleScene = document.querySelector("#title_scene");
     PlayScene = document.querySelector("#playing_scene");
     ResultScene = document.querySelector("#result_scene");
+    ResultDisplay = document.querySelector("#result_display_block");
     inputDisplay = document.querySelector("#input");
 
     //効果音の読み込み    
@@ -166,18 +171,42 @@ function init() {
         document.querySelector('#unmute_button')?.classList.add('volume_active');
         document.querySelector('#mute_button')?.classList.remove('volume_active');
     });
+    document.querySelector("#detail_button")?.addEventListener("click", () => {
+        var detailScoreClassList = document.querySelector("#detail_score")?.classList;
+        if(detailScoreClassList?.contains("hide")){
+            detailScoreClassList.remove("hide");
+            ResultDisplay?.classList.add("hide");
+        }else{
+            detailScoreClassList?.add("hide");
+            ResultDisplay?.classList.remove("hide");
+        }
+    })
+
+    document.querySelector("#to_prev_word_chart")?.addEventListener("click", () => {
+        if(result_word_index != 0){
+            result_word_index--; 
+            showDetailedResult();  
+        } 
+    })    
+    document.querySelector("#to_next_word_chart")?.addEventListener("click", () => {
+        if(result_word_index != question_num - 1) {
+            result_word_index++; 
+            showDetailedResult();
+        }
+    })
+
     document.querySelector('#credit')!.innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi";
     setState(GameState.loaded);
 }
 
 async function fetchWords(_question_num: number) {
-    if (DEBUG_MODE) {
-        Wordlist = mockWordlist;
-        target_string = Wordlist[word_index]["displaykana"];
-        displayTarget(word_index);
-        displayDebugInfo();
-        return;
-    }
+    // if (DEBUG_MODE) {
+    //     Wordlist = mockWordlist;
+    //     target_string = Wordlist[word_index]["displaykana"];
+    //     displayTarget(word_index);
+    //     displayDebugInfo();
+    //     return;
+    // }
     const GetHeader = new Headers();
     GetHeader.append('Content-Type', 'application/json')
     const GetInit = {
@@ -215,14 +244,14 @@ function keydown(e: KeyboardEvent) {
             if (e.key == "Enter") {
                 setState(GameState.playing);
                 return;
-            }
+            } 
             break;
         case GameState.playing:
             //大文字小文字を区別しない。英語入力時に困ったら修正する。
             typed(e.key.toLowerCase());
             break;
         case GameState.result:
-            if (e.key == "Enter") {
+            if (e.key == "Escape") {
                 setState(GameState.loaded);
                 return;
             }
@@ -239,13 +268,14 @@ prev_kana       仮名表記のひとつ前の課題文字
 target_kana     仮名表記の課題文字
 next_kana       仮名表記の次の課題文字
 */
-export function typed(input: string) {
+export function typed(input: string, initState: boolean = false) {
     document.querySelectorAll(".wrong_char").forEach(w => w.remove());
 
 
     kanaUpdate();
     // const automaton: (t: string, n:string) =>  = setAutomaton(target_kana, next_kana);
     const automaton: any = setAutomaton(target_kana, next_kana);
+    if(initState)state="q_init";
     let res = automaton(input, state, prev_char, next_kana);
     let latest = inputDisplay!.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
@@ -255,14 +285,15 @@ export function typed(input: string) {
         inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
         return;
     }
+    var time_delta = performance.now() - prev_input_time;
+    prev_input_time = performance.now();
+    inputHistory.push({input: input, expected: latest?.innerHTML, timeTillInput: time_delta, kpm: 60*1000/time_delta, hit: res[0] == "hit", wordEnd: false})
     state = res[2]
     if (res[0] == "hit") {
         keyHit(input, res[1])
     } else {
         keyMiss(input)
     };
-    inputHistory.push({input: input, expected: latest?.innerHTML, timeTillInput: Date.now() - prev_input_time, hit: res[0] == "hit"})
-    prev_input_time = Date.now();
 
     if (DEBUG_MODE) console.log(res)
     kanaUpdate();
@@ -333,6 +364,9 @@ export function kanaEnd(skipKanaCount: number) {
 
 function wordEnd() {
     buffer_loader.playSound(correct_sound_buffer, audio_context,  sound_volume);
+    History.push(inputHistory);
+    inputHistory = [];
+    //inputHistory[inputHistory.length - 1].wordEnd = true;
     resetInput();
     word_index++;
     if (word_index == Wordlist.length) {
@@ -342,7 +376,7 @@ function wordEnd() {
     displayTarget(word_index);
     kanaUpdate();
     displayDebugInfo();
-    prev_input_time = Date.now();
+    prev_input_time = performance.now();
 }
 
 function resetInput() {
@@ -352,29 +386,58 @@ function resetInput() {
 }
 
 function calcScore(time: number) {
-    if(DEBUG_MODE) console.log(inputHistory)
+    console.log(History)
     var kana_count = 0;
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
     })
-    let kpm = 60 * 1000 / (time / (kana_count * 2));
+    let kpm = 60 * 1000 * (kana_count * 2) / time ;
     let correctness = 100 * correct_key_count / (correct_key_count + wrong_key_count);
     let score = kpm * correctness / 100;
     let res: RankAndMesssage = getRankAndMessage(score);
     document.querySelector("#rank")!.innerHTML = res.Rank;
     document.querySelector("#message")!.innerHTML = res.Message;
     document.querySelector("#tpk")!.innerHTML = (time / kana_count).toFixed(3);
+    console.log(kana_count)
+    console.log(time)
     document.querySelector("#kpm")!.innerHTML = kpm.toFixed(3);
     document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
+    showDetailedResult();
+}
+
+function showDetailedResult(){
+    if(DEBUG_MODE)console.log(History)
+    document.querySelector("#question_word")!.innerHTML = Wordlist[result_word_index]["display"];
     let Canv : HTMLCanvasElement = document.querySelector<HTMLCanvasElement>("#score_chart")!;
-    resultChart = new Chart(Canv, {type: 'line', data: { labels: inputHistory.map(row => row.input), datasets: [{
-        label: 'data',
-        data: inputHistory.map(row => row.timeTillInput)
-    }]}})
+    if(resultChart != undefined)resultChart.destroy();
+    resultChart = new Chart(Canv, 
+        {
+            type: 'line', 
+            data: { 
+                labels: History[result_word_index].map(row => row.input), 
+                datasets: [{
+                    label: 'KPM',
+                    data: History[result_word_index].map(row => row.kpm)
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        suggestedMax: 2000                       
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'chartArea'
+                    }
+                }
+            }
+        }
+    )
 }
 
 function initGame() {
-    play_start_time;
+    play_start_time = Date.now();
     play_finish_time;
     correct_key_count = 0;
     wrong_key_count = 0;
@@ -395,6 +458,6 @@ function initGame() {
 
     kana_index = 0;
     inputHistory = [];
-    prev_input_time = Date.now();
-    if(resultChart != undefined)resultChart.destroy();
+    History = [];
+    prev_input_time = performance.now();
 }

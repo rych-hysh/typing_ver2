@@ -79,6 +79,7 @@ export function automaton_NN(input: string, state: string, prev_char: string, ne
 					typed(input);
 					return ["skip", 0, state];
 				}
+				i++;
 			}
 			return ["miss", 0, state]
 		case "q_1a":
