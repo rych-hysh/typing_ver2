@@ -2,17 +2,17 @@ import { DEBUG_MODE } from "../ENV/develop";
 import { mockWordlist } from "../data/mock";
 import { BufferLoader, getRankAndMessage, setAutomaton } from "./util/util"
 
+import { Chart } from 'chart.js/auto'
+
 window.addEventListener("load", init);
 window.addEventListener("keydown", keydown);
 var TitleScene: HTMLElement | null;
 var PlayScene: HTMLElement | null;
 var ResultScene: HTMLElement | null;
+var ResultDisplay: HTMLElement | null;
+var inputDisplay: HTMLElement | null;
 
-export class automaton {
-    state: string = "";
-    prev_char: string = "";
-    next_kana: string = "";
-}
+var resultChart: Chart;
 
 enum GameState {
     "loading",
@@ -36,20 +36,32 @@ interface inputs {
     input: string,
     next_kana: string
 }
+
+interface inputLog {
+    input: string,
+    expected: string | undefined, //TODO: 未実装。実装の可否も含めて検討する
+    timeTillInput: number,
+    kpm: number,
+    hit: boolean,
+    wordEnd: boolean
+}
+var inputHistory: inputLog[] = [];
+var History: inputLog[][] = [];
 var game_state: GameState = GameState.loading;
 
 var play_start_time: number;
 var play_finish_time: number;
+var prev_input_time: number;
 var correct_key_count: number = 0;
 var wrong_key_count: number = 0;
-var dupulicate_wrong_gurad: boolean = false;
+var dupulicate_wrong_guard: boolean = false;
 
-var target_string: string;
+
 
 var Wordlist: WordList[] = [];
 var word_index: number = 0;
 var question_num: number = 10;
-
+var target_string: string;
 var prev_kana: string;
 var target_kana: string;
 var next_kana: string;
@@ -68,6 +80,8 @@ let correct_sound_buffer: any;
 
 var audio_context: AudioContext;
 var sound_volume: number = 1;
+
+var result_word_index: number = 0;
 
 const WordListRequest = new Request('data/wordlist.json');
 
@@ -95,15 +109,14 @@ function setState(new_state: GameState) {
 }
 
 function startGame() {
-    resetGame();
     fetchWords(question_num).then(() => {
         kanaUpdate();
         displayTarget();
         PlayScene?.classList.remove("hide");
         TitleScene?.classList.add("hide");
         ResultScene?.classList.add("hide");
-        play_start_time = Date.now();
     })
+    initGame();
 }
 
 function showResult() {
@@ -117,6 +130,8 @@ function init() {
     TitleScene = document.querySelector("#title_scene");
     PlayScene = document.querySelector("#playing_scene");
     ResultScene = document.querySelector("#result_scene");
+    ResultDisplay = document.querySelector("#result_display_block");
+    inputDisplay = document.querySelector("#input");
 
     //効果音の読み込み    
     try {
@@ -156,18 +171,42 @@ function init() {
         document.querySelector('#unmute_button')?.classList.add('volume_active');
         document.querySelector('#mute_button')?.classList.remove('volume_active');
     });
+    document.querySelector("#detail_button")?.addEventListener("click", () => {
+        var detailScoreClassList = document.querySelector("#detail_score")?.classList;
+        if(detailScoreClassList?.contains("hide")){
+            detailScoreClassList.remove("hide");
+            ResultDisplay?.classList.add("hide");
+        }else{
+            detailScoreClassList?.add("hide");
+            ResultDisplay?.classList.remove("hide");
+        }
+    })
+
+    document.querySelector("#to_prev_word_chart")?.addEventListener("click", () => {
+        if(result_word_index != 0){
+            result_word_index--; 
+            showDetailedResult();  
+        } 
+    })    
+    document.querySelector("#to_next_word_chart")?.addEventListener("click", () => {
+        if(result_word_index != question_num - 1) {
+            result_word_index++; 
+            showDetailedResult();
+        }
+    })
+
     document.querySelector('#credit')!.innerHTML = "©2023-" + new Date().getFullYear() + ", Hayashi Ryoichi";
     setState(GameState.loaded);
 }
 
 async function fetchWords(_question_num: number) {
-    if (DEBUG_MODE) {
-        Wordlist = mockWordlist;
-        target_string = Wordlist[word_index]["displaykana"];
-        displayTarget(word_index);
-        displayDebugInfo();
-        return;
-    }
+    // if (DEBUG_MODE) {
+    //     Wordlist = mockWordlist;
+    //     target_string = Wordlist[word_index]["displaykana"];
+    //     displayTarget(word_index);
+    //     displayDebugInfo();
+    //     return;
+    // }
     const GetHeader = new Headers();
     GetHeader.append('Content-Type', 'application/json')
     const GetInit = {
@@ -205,14 +244,14 @@ function keydown(e: KeyboardEvent) {
             if (e.key == "Enter") {
                 setState(GameState.playing);
                 return;
-            }
+            } 
             break;
         case GameState.playing:
             //大文字小文字を区別しない。英語入力時に困ったら修正する。
             typed(e.key.toLowerCase());
             break;
         case GameState.result:
-            if (e.key == "Enter") {
+            if (e.key == "Escape") {
                 setState(GameState.loaded);
                 return;
             }
@@ -229,14 +268,14 @@ prev_kana       仮名表記のひとつ前の課題文字
 target_kana     仮名表記の課題文字
 next_kana       仮名表記の次の課題文字
 */
-export function typed(input: string) {
-    const inputDisplay: HTMLElement | null = document.querySelector("#input");
+export function typed(input: string, initState: boolean = false) {
     document.querySelectorAll(".wrong_char").forEach(w => w.remove());
 
 
     kanaUpdate();
     // const automaton: (t: string, n:string) =>  = setAutomaton(target_kana, next_kana);
     const automaton: any = setAutomaton(target_kana, next_kana);
+    if(initState)state="q_init";
     let res = automaton(input, state, prev_char, next_kana);
     let latest = inputDisplay!.querySelector(".latest")
     if (latest != null) latest.classList.remove("latest")
@@ -246,31 +285,44 @@ export function typed(input: string) {
         inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>";
         return;
     }
+    var time_delta = performance.now() - prev_input_time;
+    prev_input_time = performance.now();
+    inputHistory.push({input: input, expected: latest?.innerHTML, timeTillInput: time_delta, kpm: 60*1000/time_delta, hit: res[0] == "hit", wordEnd: false})
     state = res[2]
     if (res[0] == "hit") {
-        correct_key_count++;
-        dupulicate_wrong_gurad = false;
-        prev_char = input;
-        inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
-        if (kana_index >= target_string.length - 1 && state == "q_exit") {
-            wordEnd();
-        } else if (state == "q_exit") {
-            kanaEnd(res[1]);
-        } else {
-            buffer_loader.playSound(type_sound_buffer, audio_context, sound_volume);
-        }
+        keyHit(input, res[1])
     } else {
-        if (!dupulicate_wrong_gurad) wrong_key_count++;
-        dupulicate_wrong_gurad = true;
-        buffer_loader.playSound(miss_sound_buffer, audio_context, sound_volume);
-        const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"wrong_char");
-        if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
-        inputDisplay!.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
-
+        keyMiss(input)
     };
+
     if (DEBUG_MODE) console.log(res)
     kanaUpdate();
     displayDebugInfo();
+}
+
+function keyHit(input: string, skipKanaCount: number){
+    correct_key_count++;
+    dupulicate_wrong_guard = false;
+    prev_char = input;
+    inputDisplay!.innerHTML += "<span class='correct_char latest'>" + input + "</span>"
+    if (kana_index >= target_string.length - 1 && state == "q_exit") {
+        wordEnd();
+    } else if (state == "q_exit") {
+        kanaEnd(skipKanaCount);
+    } else {
+        buffer_loader.playSound(type_sound_buffer, audio_context, sound_volume);
+    }
+}
+
+function keyMiss(input: string){
+    if (!dupulicate_wrong_guard) wrong_key_count++;
+    dupulicate_wrong_guard = true;
+
+    buffer_loader.playSound(miss_sound_buffer, audio_context, sound_volume);
+    
+    const lastIndex = inputDisplay!.innerHTML.lastIndexOf("<span class=\"wrong_char");
+    if (lastIndex != -1) inputDisplay!.innerHTML = inputDisplay!.innerHTML.slice(0, lastIndex);
+    inputDisplay!.innerHTML += "<span class='wrong_char latest'>" + input + "</span>";
 }
 
 function displayTarget(index = 0) {
@@ -312,6 +364,9 @@ export function kanaEnd(skipKanaCount: number) {
 
 function wordEnd() {
     buffer_loader.playSound(correct_sound_buffer, audio_context,  sound_volume);
+    History.push(inputHistory);
+    inputHistory = [];
+    //inputHistory[inputHistory.length - 1].wordEnd = true;
     resetInput();
     word_index++;
     if (word_index == Wordlist.length) {
@@ -321,6 +376,7 @@ function wordEnd() {
     displayTarget(word_index);
     kanaUpdate();
     displayDebugInfo();
+    prev_input_time = performance.now();
 }
 
 function resetInput() {
@@ -334,7 +390,7 @@ function calcScore(time: number) {
     Wordlist.forEach(word => {
         kana_count += word["displaykana"].length;
     })
-    let kpm = 60 * 1000 / (time / (kana_count * 2));
+    let kpm = 60 * 1000 * (kana_count * 2) / time ;
     let correctness = 100 * correct_key_count / (correct_key_count + wrong_key_count);
     let score = kpm * correctness / 100;
     let res: RankAndMesssage = getRankAndMessage(score);
@@ -342,15 +398,48 @@ function calcScore(time: number) {
     document.querySelector("#message")!.innerHTML = res.Message;
     document.querySelector("#tpk")!.innerHTML = (time / kana_count).toFixed(3);
     document.querySelector("#kpm")!.innerHTML = kpm.toFixed(3);
+    document.querySelector("#kps")!.innerHTML = (kpm/60).toFixed(3);
     document.querySelector("#crt")!.innerHTML = correctness.toFixed(3);
+    showDetailedResult();
 }
 
-function resetGame() {
-    play_start_time;
+function showDetailedResult(){
+    if(DEBUG_MODE)console.log(History)
+    document.querySelector("#question_word")!.innerHTML = Wordlist[result_word_index]["display"];
+    let Canv : HTMLCanvasElement = document.querySelector<HTMLCanvasElement>("#score_chart")!;
+    if(resultChart != undefined)resultChart.destroy();
+    resultChart = new Chart(Canv, 
+        {
+            type: 'line', 
+            data: { 
+                labels: History[result_word_index].map(row => row.input), 
+                datasets: [{
+                    label: 'KPM',
+                    data: History[result_word_index].map(row => row.kpm)
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        suggestedMax: 2000                       
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'chartArea'
+                    }
+                }
+            }
+        }
+    )
+}
+
+function initGame() {
+    play_start_time = Date.now();
     play_finish_time;
     correct_key_count = 0;
     wrong_key_count = 0;
-    dupulicate_wrong_gurad = false;
+    dupulicate_wrong_guard = false;
 
     target_string = "";
 
@@ -366,4 +455,8 @@ function resetGame() {
     state = "q_init";
 
     kana_index = 0;
+    inputHistory = [];
+    History = [];
+    result_word_index = 0;
+    prev_input_time = performance.now();
 }

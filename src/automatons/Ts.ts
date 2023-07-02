@@ -21,7 +21,6 @@ export function automaton_TA(input: string, state: string, prev_char: string, ne
 	}
 }
 export function automaton_TI(input: string, state: string, prev_char: string, next_kana: string) {
-	console.log(state)
 	switch (state) {
 		case "q_init":
 			if (input == "t") {
@@ -197,7 +196,6 @@ export function automaton_DO(input: string, state: string, prev_char: string, ne
 }
 
 export function automaton_LTU(input: string, state: string, prev_char: string, next_kana: string) {
-	console.log(state)
 	switch (state) {
 		case "q_init":
 			if (input == "l" || input == "x") {
